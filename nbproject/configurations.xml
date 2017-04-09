@@ -12,7 +12,17 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>src/main.cpp</itemPath>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>src/DlgSettings.cpp</itemPath>
+        <itemPath>src/DlgSettings.h</itemPath>
+        <itemPath>src/DlgUserPassword.cpp</itemPath>
+        <itemPath>src/DlgUserPassword.h</itemPath>
+        <itemPath>src/MainWindow.cpp</itemPath>
+        <itemPath>src/MainWindow.h</itemPath>
+        <itemPath>src/Settings.cpp</itemPath>
+        <itemPath>src/Settings.h</itemPath>
+        <itemPath>src/main.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -38,10 +48,29 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
-        <modules>core gui widgets</modules>
+        <modules>core gui widgets network</modules>
+        <defs>
+          <Elem>QT += KIconThemes KIOCore KIOFileWidgets KIOWidgets KNTLM</Elem>
+        </defs>
       </qt>
       <compileType>
       </compileType>
+      <item path="src/DlgSettings.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DlgSettings.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DlgUserPassword.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DlgUserPassword.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MainWindow.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MainWindow.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Settings.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Settings.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -53,7 +82,7 @@
       </toolsSet>
       <qt>
         <buildMode>1</buildMode>
-        <modules>core gui widgets</modules>
+        <modules>core gui widgets network</modules>
       </qt>
       <compileType>
         <cTool>
@@ -69,6 +98,22 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="src/DlgSettings.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DlgSettings.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DlgUserPassword.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DlgUserPassword.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MainWindow.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MainWindow.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Settings.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Settings.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
