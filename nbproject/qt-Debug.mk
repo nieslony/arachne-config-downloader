@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_DBUS_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -Inbproject -I. -isystem /usr/include/KF5/KIconThemes -isystem /usr/include/KF5/KIOFileWidgets -isystem /usr/include/KF5/KIOWidgets -isystem /usr/include/KF5/KBookmarks -isystem /usr/include/KF5/KXmlGui -isystem /usr/include/KF5/KConfigWidgets -isystem /usr/include/KF5/KWidgetsAddons -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/KF5/KConfigGui -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtNetwork -isystem /usr/include/KF5/KIOCore -isystem /usr/include/KF5/KAuth -isystem /usr/include/KF5/KNTLM -isystem /usr/include/KF5/KCoreAddons -isystem /usr/include/KF5/KService -isystem /usr/include/KF5/KConfigCore -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtDBus -isystem /usr/include/KF5/KCodecs -isystem /usr/include/KF5/Solid -isystem /usr/include/qt5/QtCore -I. -I/usr/lib64/qt5/mkspecs/linux-g++
+INCPATH       = -Inbproject -I. -isystem /usr/include/KF5/KIconThemes -isystem /usr/include/KF5/KIOFileWidgets -isystem /usr/include/KF5/KIOWidgets -isystem /usr/include/KF5/KBookmarks -isystem /usr/include/KF5/KXmlGui -isystem /usr/include/KF5/KConfigWidgets -isystem /usr/include/KF5/KWidgetsAddons -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/KF5/KConfigGui -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtNetwork -isystem /usr/include/KF5/KIOCore -isystem /usr/include/KF5/KAuth -isystem /usr/include/KF5/KNTLM -isystem /usr/include/KF5/KCoreAddons -isystem /usr/include/KF5/KService -isystem /usr/include/KF5/KConfigCore -isystem /usr/include/qt5/QtXml -isystem /usr/include/qt5/QtDBus -isystem /usr/include/KF5/KCodecs -isystem /usr/include/KF5/Solid -isystem /usr/include/qt5/QtCore -Ibuild/Debug/GNU-Linux/moc -I/usr/lib64/qt5/mkspecs/linux-g++
 QMAKE         = /usr/bin/qmake-qt5
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -52,8 +52,8 @@ SOURCES       = src/DlgSettings.cpp \
 		src/DlgUserPassword.cpp \
 		src/MainWindow.cpp \
 		src/Settings.cpp \
-		src/main.cpp moc_DlgSettings.cpp \
-		moc_MainWindow.cpp
+		src/main.cpp build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp \
+		build/Debug/GNU-Linux/moc/moc_MainWindow.cpp
 OBJECTS       = build/Debug/GNU-Linux/DlgSettings.o \
 		build/Debug/GNU-Linux/DlgUserPassword.o \
 		build/Debug/GNU-Linux/MainWindow.o \
@@ -130,7 +130,6 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
-		nbproject/.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -240,7 +239,6 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
-		.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -338,7 +336,6 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 /usr/lib64/qt5/mkspecs/features/qt_config.prf:
 /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib64/qt5/mkspecs/features/spec_post.prf:
-.qmake.stash:
 /usr/lib64/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib64/qt5/mkspecs/features/toolchain.prf:
 /usr/lib64/qt5/mkspecs/features/default_pre.prf:
@@ -408,25 +405,25 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_predefs_make_all: moc_predefs.h
+compiler_moc_predefs_make_all: build/Debug/GNU-Linux/moc/moc_predefs.h
 compiler_moc_predefs_clean:
-	-$(DEL_FILE) moc_predefs.h
-moc_predefs.h: /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
-	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
+	-$(DEL_FILE) build/Debug/GNU-Linux/moc/moc_predefs.h
+build/Debug/GNU-Linux/moc/moc_predefs.h: /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
+	g++ -pipe -g -Wall -W -dM -E -o build/Debug/GNU-Linux/moc/moc_predefs.h /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_DlgSettings.cpp moc_MainWindow.cpp
+compiler_moc_header_make_all: build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp build/Debug/GNU-Linux/moc/moc_MainWindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_DlgSettings.cpp moc_MainWindow.cpp
-moc_DlgSettings.cpp: src/DlgSettings.h \
-		moc_predefs.h \
+	-$(DEL_FILE) build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp build/Debug/GNU-Linux/moc/moc_MainWindow.cpp
+build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp: src/DlgSettings.h \
+		build/Debug/GNU-Linux/moc/moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/claas/NetBeansProjects/openvpnadmin_configdownloader/nbproject -I/usr/include/KF5/KIconThemes -I/usr/include/KF5/KIOFileWidgets -I/usr/include/KF5/KIOWidgets -I/usr/include/KF5/KBookmarks -I/usr/include/KF5/KXmlGui -I/usr/include/KF5/KConfigWidgets -I/usr/include/KF5/KWidgetsAddons -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/KF5/KConfigGui -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/KF5/KIOCore -I/usr/include/KF5/KAuth -I/usr/include/KF5/KNTLM -I/usr/include/KF5/KCoreAddons -I/usr/include/KF5/KService -I/usr/include/KF5/KConfigCore -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtDBus -I/usr/include/KF5/KCodecs -I/usr/include/KF5/Solid -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-redhat-linux -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-redhat-linux/6.3.1/include -I/usr/local/include -I/usr/include src/DlgSettings.h -o moc_DlgSettings.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include build/Debug/GNU-Linux/moc/moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/claas/NetBeansProjects/openvpnadmin_configdownloader/nbproject -I/usr/include/KF5/KIconThemes -I/usr/include/KF5/KIOFileWidgets -I/usr/include/KF5/KIOWidgets -I/usr/include/KF5/KBookmarks -I/usr/include/KF5/KXmlGui -I/usr/include/KF5/KConfigWidgets -I/usr/include/KF5/KWidgetsAddons -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/KF5/KConfigGui -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/KF5/KIOCore -I/usr/include/KF5/KAuth -I/usr/include/KF5/KNTLM -I/usr/include/KF5/KCoreAddons -I/usr/include/KF5/KService -I/usr/include/KF5/KConfigCore -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtDBus -I/usr/include/KF5/KCodecs -I/usr/include/KF5/Solid -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-redhat-linux -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-redhat-linux/6.3.1/include -I/usr/local/include -I/usr/include src/DlgSettings.h -o build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp
 
-moc_MainWindow.cpp: src/Settings.h \
+build/Debug/GNU-Linux/moc/moc_MainWindow.cpp: src/Settings.h \
 		src/MainWindow.h \
-		moc_predefs.h \
+		build/Debug/GNU-Linux/moc/moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
-	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/claas/NetBeansProjects/openvpnadmin_configdownloader/nbproject -I/usr/include/KF5/KIconThemes -I/usr/include/KF5/KIOFileWidgets -I/usr/include/KF5/KIOWidgets -I/usr/include/KF5/KBookmarks -I/usr/include/KF5/KXmlGui -I/usr/include/KF5/KConfigWidgets -I/usr/include/KF5/KWidgetsAddons -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/KF5/KConfigGui -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/KF5/KIOCore -I/usr/include/KF5/KAuth -I/usr/include/KF5/KNTLM -I/usr/include/KF5/KCoreAddons -I/usr/include/KF5/KService -I/usr/include/KF5/KConfigCore -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtDBus -I/usr/include/KF5/KCodecs -I/usr/include/KF5/Solid -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-redhat-linux -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-redhat-linux/6.3.1/include -I/usr/local/include -I/usr/include src/MainWindow.h -o moc_MainWindow.cpp
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include build/Debug/GNU-Linux/moc/moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/claas/NetBeansProjects/openvpnadmin_configdownloader/nbproject -I/usr/include/KF5/KIconThemes -I/usr/include/KF5/KIOFileWidgets -I/usr/include/KF5/KIOWidgets -I/usr/include/KF5/KBookmarks -I/usr/include/KF5/KXmlGui -I/usr/include/KF5/KConfigWidgets -I/usr/include/KF5/KWidgetsAddons -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/KF5/KConfigGui -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtNetwork -I/usr/include/KF5/KIOCore -I/usr/include/KF5/KAuth -I/usr/include/KF5/KNTLM -I/usr/include/KF5/KCoreAddons -I/usr/include/KF5/KService -I/usr/include/KF5/KConfigCore -I/usr/include/qt5/QtXml -I/usr/include/qt5/QtDBus -I/usr/include/KF5/KCodecs -I/usr/include/KF5/Solid -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-redhat-linux -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-redhat-linux/6.3.1/include -I/usr/local/include -I/usr/include src/MainWindow.h -o build/Debug/GNU-Linux/moc/moc_MainWindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -462,11 +459,11 @@ build/Debug/GNU-Linux/main.o: src/main.cpp src/MainWindow.h \
 		src/Settings.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/main.o src/main.cpp
 
-build/Debug/GNU-Linux/moc_DlgSettings.o: moc_DlgSettings.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_DlgSettings.o moc_DlgSettings.cpp
+build/Debug/GNU-Linux/moc_DlgSettings.o: build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_DlgSettings.o build/Debug/GNU-Linux/moc/moc_DlgSettings.cpp
 
-build/Debug/GNU-Linux/moc_MainWindow.o: moc_MainWindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_MainWindow.o moc_MainWindow.cpp
+build/Debug/GNU-Linux/moc_MainWindow.o: build/Debug/GNU-Linux/moc/moc_MainWindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_MainWindow.o build/Debug/GNU-Linux/moc/moc_MainWindow.cpp
 
 ####### Install
 

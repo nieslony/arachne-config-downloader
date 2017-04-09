@@ -49,6 +49,7 @@
       </toolsSet>
       <qt>
         <modules>core gui widgets network</modules>
+        <mocDir>${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/moc</mocDir>
         <defs>
           <Elem>QT += KIconThemes KIOCore KIOFileWidgets KIOWidgets KNTLM</Elem>
         </defs>
@@ -83,6 +84,7 @@
       <qt>
         <buildMode>1</buildMode>
         <modules>core gui widgets network</modules>
+        <mocDir>${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/moc</mocDir>
       </qt>
       <compileType>
         <cTool>
