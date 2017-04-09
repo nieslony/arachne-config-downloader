@@ -4,3 +4,6 @@ dist
 nbproject/private/
 .dep.inc
 .qmake.stash
+moc_*cpp
+moc_*h
+*~
