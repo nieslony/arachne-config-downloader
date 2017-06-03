@@ -22,7 +22,7 @@ const QString Settings::DOWNLOAD_TYPE("downloadType");
 Settings Settings::globalSettings;
 
 Settings::Settings() 
-    : settings("OpenVPN_Admin_ConfigDownloader")
+    : settings("Arachne_ConfigDownloader")
 {
     
 }
@@ -38,7 +38,7 @@ Settings &Settings::getGlobalSettings()
 
 QString Settings::adminServerUrl()
 {
-    QString defaultUrl(QString("https://openvpn.%1/OpenVPN_Admin").arg(QHostInfo::localDomainName()));
+    QString defaultUrl(QString("https://openvpn.%1/arachne").arg(QHostInfo::localDomainName()));
     
     return settings.value(ADMIN_SERVER_URL, defaultUrl).toString();
 }

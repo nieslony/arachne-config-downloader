@@ -43,11 +43,13 @@
   <confs>
     <conf name="Debug" type="4">
       <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
+        <target>ovpncdl</target>
+        <version>0.1.3</version>
         <modules>core gui widgets network</modules>
         <mocDir>${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/moc</mocDir>
         <defs>
@@ -55,6 +57,9 @@
         </defs>
       </qt>
       <compileType>
+        <ccTool>
+          <standard>11</standard>
+        </ccTool>
       </compileType>
       <item path="src/DlgSettings.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -82,9 +87,13 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
-        <buildMode>1</buildMode>
+        <target>ovpncdl</target>
+        <version>0.1.3</version>
         <modules>core gui widgets network</modules>
         <mocDir>${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/moc</mocDir>
+        <defs>
+          <Elem>QT += KIconThemes KIOCore KIOFileWidgets KIOWidgets KNTLM</Elem>
+        </defs>
       </qt>
       <compileType>
         <cTool>
@@ -92,6 +101,7 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>11</standard>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
