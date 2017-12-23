@@ -1,5 +1,5 @@
-Name:       OpenVPN_Admin_ConfigDownloader
-Version:    0.1.2
+Name:       arachne_ConfigDownloader
+Version:    0.1.3
 Release:    1
 Summary:    Web application for administering openVPN
 
@@ -13,6 +13,7 @@ BuildRequires:  libqt5-qtbase-common-devel kio-devel kiconthemes-devel
 BuildRequires:  update-desktop-files
 %define icons_dir %{_kf5_iconsdir}
 %define desktop_dir %{_kf5_applicationsdir}
+%define autostart_dir   %{_sysconfdir}/xdg/autostart
 %else
 BuildRequires:  qt5-qtbase-devel kf5-kio-devel kf5-kiconthemes-devel 
 BuildRequires:  desktop-file-utils kf5-rpm-macros
@@ -32,6 +33,7 @@ qmake-qt5 -after \
     MOC_DIR=%{_builddir}/%{name}-%{version}/moc \
     OBJECTS_DIR=%{_builddir}/%{name}-%{version}/obj \
     DESTDIR=%{_builddir}/%{name}-%{version}/bin \
+    QMAKE_CXXFLAGS+=-std=c++11 \
     nbproject/qt-Release.pro
 
 make    
@@ -40,7 +42,7 @@ make
 %{_bindir}/ovpncdl
 %{icons_dir}/hicolor/*/apps/ovpncdl-green.png
 %{desktop_dir}/ovpncdl.desktop
-%{autostart_dir}/ovpncdl.desktop
+/%{autostart_dir}/ovpncdl.desktop
 
 %doc doc/COPYING 
 
@@ -54,9 +56,7 @@ install %{_builddir}/%{name}-%{version}/icons/ovpncdl-green-32x32.png %{buildroo
 install %{_builddir}/%{name}-%{version}/icons/ovpncdl-green-48x48.png %{buildroot}/%{icons_dir}/hicolor/48x48/apps/ovpncdl-green.png
 install %{_builddir}/%{name}-%{version}/icons/ovpncdl-green-64x64.png %{buildroot}/%{icons_dir}/hicolor/64x64/apps/ovpncdl-green.png
 
-%if 0%{?suse_version}
-%suse_update_desktop_file --create ovpncdl ovpncdl "OpenVPN config downloader" ovpncdl ovpncdl-green Applet
-%else
+
 mkdir -pv %{buildroot}/%{desktop_dir}
 touch %{buildroot}/%{desktop_dir}/ovpncdl.desktop
 desktop-file-edit --set-name=ovpncdl \
@@ -64,6 +64,8 @@ desktop-file-edit --set-name=ovpncdl \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
     --set-key=Exec --set-value=ovpncdl \
+    --add-only-show-in="KDE" \
+    --add-category="KDE" \
     %{buildroot}/%{desktop_dir}/ovpncdl.desktop
 
 mkdir -pv %{buildroot}/%{autostart_dir}
@@ -73,8 +75,9 @@ desktop-file-edit --set-name=ovpncdl \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
     --set-key=Exec --set-value=ovpncdl \
+    --add-only-show-in="KDE" \
+    --add-category="KDE" \
     %{buildroot}/%{autostart_dir}/ovpncdl.desktop
-%endif
 
 %changelog
 * Sun Nov 06 2016 Claas Nieslony <claas@nieslony.at> 0.1.0

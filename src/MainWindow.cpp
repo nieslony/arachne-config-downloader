@@ -24,10 +24,19 @@
 #include <QPixmap>
 #include <QProcess>
 
+#ifdef Q_OS_LINUX
 #include <KIO/CopyJob>
 #include <KIO/MetaData>
 #include <KJobUiDelegate>
 #include <KIconLoader>
+#endif
+
+#ifdef Q_OS_WIN
+#define SECURITY_WIN32
+#include <windows.h>
+#include <security.h>
+#pragma comment(lib,"secur32.lib")
+#endif
 
 MainWindow::MainWindow()
 {
@@ -89,6 +98,7 @@ void MainWindow::onDownloadNow()
     }
 }
 
+#ifdef Q_OS_LINUX
 void MainWindow::downloadAndExcecute()
 {
     QString url = Settings::getGlobalSettings().downloadUrl();
@@ -110,7 +120,6 @@ void MainWindow::downloadAndExcecute()
     copyJob->setUiDelegateExtension(0); 
     connect(copyJob, SIGNAL(result(KJob*)), SLOT(onJobResult(KJob*)));
 }
-
 
 void MainWindow::onJobResult(KJob* job)
 {
@@ -153,6 +162,9 @@ void MainWindow::onJobResult(KJob* job)
          qDebug() << "Job finished mith error " << job->error() << job->errorString();
     }
 }
+#endif
+#ifdef Q_OS_WIN
+#endif
 
 void MainWindow::onGotoWebpage()
 {
@@ -166,10 +178,10 @@ void MainWindow::createActions()
     downloadAction = new QAction(tr("&Downlaod configuration now"), this);
     connect(downloadAction, SIGNAL(triggered()), SLOT(onDownloadNow()));
     
-    settingsAction = new QAction(tr("&Settings"), this);
+    settingsAction = new QAction(tr("&Settings..."), this);
     connect(settingsAction, SIGNAL(triggered()), SLOT(onSettings()));
     
-    gotoWebpageAction = new QAction(tr("Goto OpenVPN_Admin webpage"), this);
+    gotoWebpageAction = new QAction(tr("Goto Arachne webpage..."), this);
     connect(gotoWebpageAction, SIGNAL(triggered()), SLOT(onGotoWebpage()));
     
     quitAction = new QAction(tr("&Quit"), this);
@@ -193,9 +205,9 @@ void MainWindow::createTrayIcon()
     
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(icon);
-    trayIcon->setToolTip("OpenVPN config downloader");
+    trayIcon->setToolTip("Arachne client configuration downloader");
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setObjectName(tr("Configuration downloader for OpenVPN_Admin"));
+    trayIcon->setObjectName(tr("Configuration downloader for Arachne"));
 }
 
 QString MainWindow::formatDirmame(const QString& dirname)

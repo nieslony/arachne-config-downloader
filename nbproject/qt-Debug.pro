@@ -2,8 +2,8 @@
 # Use project properties -> Build -> Qt -> Expert -> Custom Definitions.
 TEMPLATE = app
 DESTDIR = dist/Debug/GNU-Linux
-TARGET = openvpnadmin_configdownloader
-VERSION = 1.0.0
+TARGET = ovpncdl
+VERSION = 0.1.3
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
@@ -22,4 +22,7 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
 LIBS += 
+equals(QT_MAJOR_VERSION, 4) {
+QMAKE_CXXFLAGS += -std=c++14
+}
 QT += KIconThemes KIOCore KIOFileWidgets KIOWidgets KNTLM
