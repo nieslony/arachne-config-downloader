@@ -112,9 +112,21 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_packetprotocol_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qml.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qml_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quick.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quick_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_testlib.pri \
@@ -130,6 +142,7 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
+		nbproject/.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -221,9 +234,21 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_packetprotocol_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qml.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qml_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quick.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quick_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib64/qt5/mkspecs/modules/qt_lib_testlib.pri \
@@ -239,6 +264,7 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -318,9 +344,21 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 /usr/lib64/qt5/mkspecs/modules/qt_lib_opengl_private.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_openglextensions_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_packetprotocol_private.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_printsupport_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qml.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qml_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldebug_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_qmltest_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_quick.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_quick_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets.pri:
+/usr/lib64/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_sql_private.pri:
 /usr/lib64/qt5/mkspecs/modules/qt_lib_testlib.pri:
@@ -336,6 +374,7 @@ qttmp-Debug.mk: nbproject/qt-Debug.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.co
 /usr/lib64/qt5/mkspecs/features/qt_config.prf:
 /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib64/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib64/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib64/qt5/mkspecs/features/toolchain.prf:
 /usr/lib64/qt5/mkspecs/features/default_pre.prf:

@@ -7,3 +7,4 @@ nbproject/private/
 moc_*cpp
 moc_*h
 *~
+build-win64
