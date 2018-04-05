@@ -41,7 +41,7 @@
 MainWindow::MainWindow()
 {
     downloadTimer = new QTimer(this);
-    
+
     createActions();
     createTrayIcon();
 
@@ -52,15 +52,15 @@ MainWindow::MainWindow()
 void MainWindow::createTimer()
 {
     connect(downloadTimer, SIGNAL(timeout()), SLOT(onDownloadTimerTimeout()));
-    
+
     if (Settings::getGlobalSettings().autoDownload()) {
         int interval = Settings::getGlobalSettings().downloadIntervalMS();
         int delay = Settings::getGlobalSettings().downloadDelayMS();
-        qDebug() << "Starting download in " << delay / 1000 
+        qDebug() << "Starting download in " << delay / 1000
                 << "sec, interval: " << interval / 1000 << "sec";
-        downloadTimer->setInterval(interval);        
+        downloadTimer->setInterval(interval);
         downloadTimer->start(delay);
-    }    
+    }
 }
 
 void MainWindow::onDownloadTimerTimeout() {
@@ -75,7 +75,7 @@ void MainWindow::onSettings()
         if (Settings::getGlobalSettings().autoDownload()) {
             int interval = Settings::getGlobalSettings().downloadIntervalMS();
             if (downloadTimer->interval() != interval)
-                downloadTimer->setInterval(interval);            
+                downloadTimer->setInterval(interval);
             if (downloadTimer->remainingTime() > interval) {
                 downloadTimer->start();
             }
@@ -105,7 +105,7 @@ void MainWindow::downloadAndExcecute()
     QUrl dest;
     if (Settings::getGlobalSettings().downloadType() == Settings::NM_EXECUTE) {
         QTemporaryFile tmpFile;
-        tmpFile.open();        
+        tmpFile.open();
         dest = QUrl("file://" + tmpFile.fileName());
         tmpFile.close();
     }
@@ -117,7 +117,7 @@ void MainWindow::downloadAndExcecute()
     }
     qDebug() << "Downloading " << url << " to " << dest.toString();
     KIO::CopyJob *copyJob = KIO::copy(QUrl(url), dest, KIO::Overwrite | KIO::DefaultFlags);
-    copyJob->setUiDelegateExtension(0); 
+    copyJob->setUiDelegateExtension(0);
     connect(copyJob, SIGNAL(result(KJob*)), SLOT(onJobResult(KJob*)));
 }
 
@@ -130,14 +130,14 @@ void MainWindow::onJobResult(KJob* job)
 
         if (Settings::getGlobalSettings().downloadType() == Settings::NM_EXECUTE) {
             QFile *destFile = new QFile(copyJob->destUrl().path());
-            qDebug() << "Set executable flag of" 
-                    << destFile->fileName() 
+            qDebug() << "Set executable flag of"
+                    << destFile->fileName()
                     << (destFile->setPermissions(destFile->permissions() | QFileDevice::ExeOwner) ?
                         "successful" : "failed");
-            
-            
+
+
             QProcess *process = new QProcess();
-            connect(process, 
+            connect(process,
                     static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
                     [process, destFile](int exitCode, QProcess::ExitStatus exitStatus) {
                         if (exitStatus == QProcess::NormalExit) {
@@ -145,31 +145,34 @@ void MainWindow::onJobResult(KJob* job)
                         }
                         else {
                             qDebug() << "nmcli crashed.";
-                        }   
-                        
+                        }
+
                         delete process;
 
                         qDebug() << "Adding/modifying NetworkManager configuration";
-                        qDebug() << "Removing of" 
-                                << destFile->fileName() 
+                        qDebug() << "Removing of"
+                                << destFile->fileName()
                                 << (destFile->remove() ? "successfull" : "failed");
                         delete destFile;
                     });
-            process->start(destFile->fileName());            
+            process->start(destFile->fileName());
         }
-    }    
+    }
     else {
          qDebug() << "Job finished mith error " << job->error() << job->errorString();
     }
 }
 #endif
 #ifdef Q_OS_WIN
+void MainWindow::downloadAndExcecute()
+{
+}
 #endif
 
 void MainWindow::onGotoWebpage()
 {
     QString url(Settings::getGlobalSettings().adminServerUrl());
-   
+
     QDesktopServices::openUrl(QUrl(url));
 }
 
@@ -177,16 +180,16 @@ void MainWindow::createActions()
 {
     downloadAction = new QAction(tr("&Downlaod configuration now"), this);
     connect(downloadAction, SIGNAL(triggered()), SLOT(onDownloadNow()));
-    
+
     settingsAction = new QAction(tr("&Settings..."), this);
     connect(settingsAction, SIGNAL(triggered()), SLOT(onSettings()));
-    
+
     gotoWebpageAction = new QAction(tr("Goto Arachne webpage..."), this);
     connect(gotoWebpageAction, SIGNAL(triggered()), SLOT(onGotoWebpage()));
-    
+
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-}   
+}
 
 void MainWindow::createTrayIcon()
 {
@@ -197,14 +200,17 @@ void MainWindow::createTrayIcon()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
 
+#ifdef Q_OS_LINUX
     QLatin1String iconName("ovpncdl-green");
     QPixmap icon( KIconLoader::global()->loadIcon(iconName, KIconLoader::Panel ) );
     if (icon.isNull()) {
         qDebug() << "Icon " << iconName << "not found";
     }
-    
+
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(icon);
+#endif
+
     trayIcon->setToolTip("Arachne client configuration downloader");
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setObjectName(tr("Configuration downloader for Arachne"));
@@ -213,10 +219,10 @@ void MainWindow::createTrayIcon()
 QString MainWindow::formatDirmame(const QString& dirname)
 {
     QString ret(dirname);
-    
+
     if (dirname.startsWith("~")) {
         ret.replace(0, 1, QDir::homePath());
     }
-    
+
     return ret;
 }
