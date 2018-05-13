@@ -41,6 +41,8 @@ private:
     void downloadAndExcecute();
     QString formatDirmame(const QString&);
 
+    bool isDownloading;
+
 private slots:
     void onSettings();
     void onDownloadNow();

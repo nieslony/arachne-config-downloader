@@ -40,6 +40,8 @@
 
 MainWindow::MainWindow()
 {
+    isDownloading = false;
+
     downloadTimer = new QTimer(this);
 
     createActions();
@@ -101,6 +103,11 @@ void MainWindow::onDownloadNow()
 #ifdef Q_OS_LINUX
 void MainWindow::downloadAndExcecute()
 {
+    if (isDownloading)
+        return;
+
+    isDownloading = true;
+
     QString url = Settings::getGlobalSettings().downloadUrl();
     QUrl dest;
     if (Settings::getGlobalSettings().downloadType() == Settings::NM_EXECUTE) {
@@ -161,6 +168,8 @@ void MainWindow::onJobResult(KJob* job)
     else {
          qDebug() << "Job finished mith error " << job->error() << job->errorString();
     }
+
+    isDownloading = false;
 }
 #endif
 #ifdef Q_OS_WIN

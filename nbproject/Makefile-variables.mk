@@ -12,16 +12,16 @@ CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
 CND_ARTIFACT_NAME_Debug=ovpncdl
 CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/ovpncdl
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
-CND_PACKAGE_NAME_Debug=openvpnadminconfigdownloader.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/openvpnadminconfigdownloader.tar
+CND_PACKAGE_NAME_Debug=arachne-config-downloader.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/arachne-config-downloader.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
 CND_ARTIFACT_NAME_Release=ovpncdl
 CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/ovpncdl
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=openvpnadminconfigdownloader.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/openvpnadminconfigdownloader.tar
+CND_PACKAGE_NAME_Release=arachne-config-downloader.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/arachne-config-downloader.tar
 #
 # include compiler specific variables
 #
