@@ -1,7 +1,8 @@
-Name:       arachne_ConfigDownloader
-Version:    0.1.3
+Name:       arachne-config-downloader-qt
+Version:    0.1.4
 Release:    1
 Summary:    Web application for administering openVPN
+Obsoletes:  arachne_ConfigDownloader
 
 License:    GPL-2.0+
 URL:        http://www.nieslony.site/OpenVPN_Admin
