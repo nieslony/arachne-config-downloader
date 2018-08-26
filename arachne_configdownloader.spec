@@ -17,7 +17,7 @@ BuildRequires:  update-desktop-files
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
 %else
 BuildRequires:  qt5-qtbase-devel kf5-kio-devel kf5-kiconthemes-devel 
-BuildRequires:  desktop-file-utils kf5-rpm-macros
+BuildRequires:  desktop-file-utils kf5-rpm-macros  pinentry-qt 
 %define icons_dir   %{_datadir}/icons
 %define desktop_dir %{_datadir}/applications
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
