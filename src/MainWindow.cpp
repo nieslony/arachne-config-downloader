@@ -124,8 +124,14 @@ void MainWindow::downloadAndExcecute()
     }
     qDebug() << "Downloading " << url << " to " << dest.toString();
     KIO::CopyJob *copyJob = KIO::copy(QUrl(url), dest, KIO::Overwrite | KIO::DefaultFlags);
-    copyJob->setUiDelegateExtension(0);
-    connect(copyJob, SIGNAL(result(KJob*)), SLOT(onJobResult(KJob*)));
+
+    if (copyJob != NULL) {
+        copyJob->setUiDelegateExtension(0);
+        connect(copyJob, SIGNAL(result(KJob*)), SLOT(onJobResult(KJob*)));
+    }
+    else {
+        qDebug() << "Cannot create copy job.";
+    }
 }
 
 void MainWindow::onJobResult(KJob* job)
