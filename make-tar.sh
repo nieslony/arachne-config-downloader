@@ -9,6 +9,7 @@ rm -vf $NAME-*.tar.gz
 echo Creating $TAR_FN...
 tar -cvzf $TAR_FN \
     --transform=s/^./$NAME-$VERSION/ \
+    --owner root --group root \
     ./src \
     ./doc \
     ./icons \
