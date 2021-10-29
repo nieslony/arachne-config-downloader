@@ -1,6 +1,6 @@
 Name:       arachne-config-downloader-qt
 Version:    0.1.4
-Release:    1
+Release:    1%{?dist}
 Summary:    Web application for administering openVPN
 Obsoletes:  arachne_ConfigDownloader
 
@@ -17,7 +17,7 @@ BuildRequires:  update-desktop-files
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
 %else
 BuildRequires:  qt5-qtbase-devel kf5-kio-devel kf5-kiconthemes-devel 
-BuildRequires:  desktop-file-utils kf5-rpm-macros  pinentry-qt openblas
+BuildRequires:  desktop-file-utils kf5-rpm-macros  
 %define icons_dir   %{_datadir}/icons
 %define desktop_dir %{_datadir}/applications
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
@@ -37,7 +37,8 @@ qmake-qt5 -after \
     QMAKE_CXXFLAGS+=-std=c++11 \
     nbproject/qt-Release.pro
 
-make    
+make %{?_smp_mflags}
+
     
 %files
 %{_bindir}/ovpncdl
