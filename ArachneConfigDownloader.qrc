@@ -1,2 +1,10 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/images">
+        <file>resources/images/ovpncdl-green-16x16.png</file>
+        <file>resources/images/ovpncdl-green.svg</file>
+        <file>resources/images/ovpncdl-green-64x64.png</file>
+        <file>resources/images/ovpncdl-green-48x48.png</file>
+        <file>resources/images/ovpncdl-green-32x32.png</file>
+        <file>resources/images/ovpncdl-green-22x22.png</file>
+    </qresource>
+</RCC>

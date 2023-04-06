@@ -31,8 +31,12 @@ private:
     void createTrayIcon();
 #ifdef Q_OS_LINUX
     void addNetworkManagerConnection(const QByteArray&json);
-    void updateNetworkManagerConnection(const QByteArray&json);
-    void buildDBusArgument(QDBusArgument &arg, const QByteArray&json);
+    void updateNetworkManagerConnection(
+            const QString &conUuid,
+            const QByteArray&json);
+    void buildDBusArgument(QDBusArgument &arg,
+                           const QByteArray&json,
+                           const QString &conUuid="");
     void createFile(const QString &fileName, const QString &content, bool isPrivate=false);
 #endif
 

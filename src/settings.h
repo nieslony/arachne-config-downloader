@@ -33,7 +33,7 @@ public:
     DownloadType downloadType();
     QString downloadDestination();
 #ifdef Q_OS_LINUX
-    QString connectionDBusPath();
+    QString connectionUuid();
     QString certsFolder();
 #endif
 
@@ -47,7 +47,7 @@ public:
     void setDownloadType(DownloadType);
     void setDownloadDestination(const QString&);
 #ifdef Q_OS_LINUX
-    void setConnectionDBusPath(const QString&);
+    void setConnectionUuid(const QString&);
 #endif
 
 private:
@@ -65,7 +65,7 @@ private:
     static const QString SN_DOWNLOAD_TYPE;
     static const QString SN_DOWNLOAD_DESTINATION;
 #ifdef Q_OS_LINUX
-    static const QString SN_CONNECTION_DBUS_PATH;
+    static const QString SN_CONNECTION_UUID;
 #endif
 };
 

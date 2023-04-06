@@ -13,6 +13,7 @@
 SettingsDialog::SettingsDialog()
 {
     setWindowTitle("Arachne Settings");
+    setWindowIcon(QIcon(":/images/ovpncdl-green-16x16.png"));
     createGui();
     loadSettings();
 

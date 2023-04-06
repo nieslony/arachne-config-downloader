@@ -13,7 +13,7 @@ const QString Settings::SN_DOWNLOAD_DELAY("downloadDelay");
 const QString Settings::SN_DOWNLOAD_TYPE("downloadType");
 const QString Settings::SN_DOWNLOAD_DESTINATION("downloadDestination");
 #ifdef Q_OS_LINUX
-const QString Settings::SN_CONNECTION_DBUS_PATH("connectionDBusPath");
+const QString Settings::SN_CONNECTION_UUID("connectionUuid");
 #endif
 
 Settings::Settings()
@@ -73,9 +73,9 @@ QString Settings::certsFolder()
     return QDir::homePath() + "/.certs";
 }
 
-QString Settings::connectionDBusPath()
+QString Settings::connectionUuid()
 {
-    return settings.value(SN_CONNECTION_DBUS_PATH).toString();
+    return settings.value(SN_CONNECTION_UUID).toString();
 }
 #endif
 
@@ -125,8 +125,8 @@ void Settings::setDownloadDestination(const QString &dest)
 }
 
 #ifdef Q_OS_LINUX
-void Settings::setConnectionDBusPath(const QString &path)
+void Settings::setConnectionUuid(const QString &path)
 {
-    settings.setValue(SN_CONNECTION_DBUS_PATH, path);
+    settings.setValue(SN_CONNECTION_UUID, path);
 }
 #endif

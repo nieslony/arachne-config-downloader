@@ -93,14 +93,18 @@ void ArachneConfigDownloaderApplication::networkManagerCopyJobDone(
     f.close();
     f.remove();
 
-    QString conDBusPath = Settings::getInstance().connectionDBusPath();
-    if (conDBusPath.isEmpty())
+    QString conUuid = Settings::getInstance().connectionUuid();
+    qDebug() << "Found connetioUuid in settings: " << conUuid;
+    if (conUuid.isEmpty())
         addNetworkManagerConnection(jsonStr);
     else
-        updateNetworkManagerConnection(jsonStr);
+        updateNetworkManagerConnection(conUuid, jsonStr);
 }
 
-void ArachneConfigDownloaderApplication::buildDBusArgument(QDBusArgument &arg, const QByteArray&json)
+void ArachneConfigDownloaderApplication::buildDBusArgument(
+        QDBusArgument &arg,
+        const QByteArray&json,
+        const QString &conUuid)
 {
     Settings &settings = Settings::getInstance();
 
@@ -144,15 +148,19 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(QDBusArgument &arg, c
     createFile(keyFileName, privateKey, true);
 
     ConnectionSettings c;
-    c.insert("connection", QMap<QString, QVariant>{
-                 {"id", connectionName},
-                 {"type", "vpn"},
-                 {"autoconnect", false},
-                 {"permissions", QVariant(QList<QString>{
-                      "user:claas"
-                  })
-                 }
-    });
+    QMap<QString, QVariant> conSettings = {
+        {"id", connectionName},
+        {"type", "vpn"},
+        {"autoconnect", false},
+        {"permissions", QVariant(QList<QString>{
+             "user:claas"
+         })
+        }
+    };
+    if (!conUuid.isEmpty())
+        conSettings.insert("uuid", conUuid);
+
+    c.insert("connection", conSettings);
     StringMap data;
     data.insert("ca", caFileName);
     data.insert("cert", certFileName);
@@ -171,24 +179,55 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(QDBusArgument &arg, c
     arg << c;
 }
 
-void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(const QByteArray&json)
+void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(
+        const QString &conUuid,
+        const QByteArray&json)
 {
-    Settings &settings = Settings::getInstance();
-    QString connectionPath = settings.connectionDBusPath();
-
-    qDebug() << "Updating connection" << connectionPath;
+    qDebug() << "Adding connection";
     QDBusArgument arg;
     try {
-        buildDBusArgument(arg, json);
+        buildDBusArgument(arg, json, conUuid);
     }
     catch (NMException ex) {
         qWarning() << ex.msg();
         return;
     }
+
+    try {
+        QString conPath = dbus_call<QDBusObjectPath>(
+                    QString("org.freedesktop.NetworkManager"),
+                    QString("/org/freedesktop/NetworkManager/Settings"),
+                    QString("org.freedesktop.NetworkManager.Settings"),
+                    QString("GetConnectionByUuid"), QVariant(conUuid)
+                    )
+                .value().path();
+        qDebug() << "Found connection:" << conPath;
+        if (conPath.isEmpty()) {
+            qDebug()
+                    << "No connection found with uuid "
+                    << conUuid
+                    << ", creating new one";
+            addNetworkManagerConnection(json);
+            return;
+        }
+
+        dbus_call<void>(
+                            QString("org.freedesktop.NetworkManager"),
+                            conPath,
+                            QString("org.freedesktop.NetworkManager.Settings.Connection"),
+                            QString("Update"), QVariant::fromValue(arg)
+                            );
+        qDebug() << "Connection" << conUuid << "updated";
+    }
+    catch (DBusException ex) {
+        qWarning() << ex.msg();
+    }
 }
 
 void ArachneConfigDownloaderApplication::addNetworkManagerConnection(const QByteArray&json)
 {
+    Settings &settings = Settings::getInstance();
+
     qDebug() << "Adding connection";
     QDBusArgument arg;
     try {
@@ -218,6 +257,7 @@ void ArachneConfigDownloaderApplication::addNetworkManagerConnection(const QByte
                 .value("uuid")
                 .toString();
         qDebug() << conUuid;
+        settings.setConnectionUuid(conUuid);
     }
     catch (DBusException ex) {
         qWarning() << ex.msg();

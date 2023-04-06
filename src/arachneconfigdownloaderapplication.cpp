@@ -23,6 +23,7 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc,
 void ArachneConfigDownloaderApplication::createTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(QIcon(":/images/ovpncdl-green-16x16.png"));
     trayIcon->setToolTip(qApp->applicationName());
 
     QAction *downloadNowAction = new QAction(tr("Download now"), this);
