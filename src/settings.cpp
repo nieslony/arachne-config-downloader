@@ -18,6 +18,7 @@ const QString Settings::SN_CONNECTION_UUID("connectionUuid");
 
 Settings::Settings()
 {
+    settings.setAtomicSyncRequired(false);
 }
 
 QString Settings::adminServerUrl()
@@ -130,3 +131,33 @@ void Settings::setConnectionUuid(const QString &path)
     settings.setValue(SN_CONNECTION_UUID, path);
 }
 #endif
+
+int Settings::downloadDeleayMsec()
+{
+    return buildTime(downloadDelay(), downloadDelayUnit());
+}
+
+int Settings::downloadIntervalMsec()
+{
+    return buildTime(downloadInterval(), downloadIntervalUnit());
+}
+
+int Settings::buildTime(int timeSpan, TimeUnit unit)
+{
+    switch (unit) {
+        case SEC:
+            return timeSpan * 100;
+    case MIN:
+        return timeSpan * 1000 * 60;
+    case HOUR:
+        return timeSpan * 1000 * 60 * 60;
+    }
+
+    return INT_MAX;
+}
+
+void Settings::sync()
+{
+    qDebug() << "Syncing settings";
+    settings.sync();
+}

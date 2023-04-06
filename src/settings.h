@@ -32,6 +32,8 @@ public:
     int downloadDelay();
     DownloadType downloadType();
     QString downloadDestination();
+    int downloadDeleayMsec();
+    int downloadIntervalMsec();
 #ifdef Q_OS_LINUX
     QString connectionUuid();
     QString certsFolder();
@@ -50,6 +52,8 @@ public:
     void setConnectionUuid(const QString&);
 #endif
 
+    void sync();
+
 private:
     Settings();
 
@@ -67,6 +71,8 @@ private:
 #ifdef Q_OS_LINUX
     static const QString SN_CONNECTION_UUID;
 #endif
+
+    int buildTime(int timeSpan, TimeUnit unit);
 };
 
 #endif // SETTINGS_H

@@ -9,6 +9,8 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QTimer>
+#include <QDebug>
 
 SettingsDialog::SettingsDialog()
 {
@@ -19,7 +21,7 @@ SettingsDialog::SettingsDialog()
 
     connect(autoDownload, &QCheckBox::toggled, this, &SettingsDialog::onToggleAutoDownload);
     //connect(downloadType, &QComboBox::currentIndexChanged, this, &SettingsDialog::onChangeDownloadType);
-    connect(this, &QDialog::accepted, this, &SettingsDialog::saveSettings);
+    connect(this, &QDialog::accepted, this, &SettingsDialog::saveSettings);    
 }
 
 void SettingsDialog::createGui()
@@ -104,6 +106,8 @@ void SettingsDialog::createGui()
 void SettingsDialog::loadSettings()
 {
     Settings &settings = Settings::getInstance();
+    settings.sync();
+
     adminServerUrl->setText(settings.adminServerUrl());
     ignoreSslErrors->setChecked(settings.ignoreSslErrors());
     autoDownload->setChecked(settings.autoDownload());
@@ -126,7 +130,22 @@ void SettingsDialog::loadSettings()
 
 void SettingsDialog::saveSettings()
 {
+    qDebug() << "Saving settings";
     Settings &settings = Settings::getInstance();
+
+    QTimer &timer = static_cast<ArachneConfigDownloaderApplication*>(qApp)->downloadTimer();
+    bool setNewInterval = false;
+    if (autoDownload->checkState()) {
+        Settings::TimeUnit unit = static_cast<Settings::TimeUnit>(downloadIntervalUnit->currentIndex());
+        if (downloadInterval->value() != settings.downloadInterval()
+                || unit != settings.downloadIntervalUnit()
+                )
+            setNewInterval = true;
+    }
+    else {
+        timer.stop();
+    }
+
     settings.setAdminServerUrl(adminServerUrl->text());
     settings.setIgnoreSslErrors(ignoreSslErrors->checkState());
     settings.setAutoDownload(autoDownload->checkState());
@@ -142,6 +161,14 @@ void SettingsDialog::saveSettings()
                 static_cast<Settings::DownloadType>(downloadType->currentIndex())
     );
     settings.setDownloadDestination(downloadDestination->text());
+
+    if (setNewInterval) {
+        timer.setInterval(settings.downloadIntervalMsec());
+        if (!timer.isActive())
+            timer.start();
+    }
+
+    settings.sync();
 }
 
 void SettingsDialog::onToggleAutoDownload(bool enabled)

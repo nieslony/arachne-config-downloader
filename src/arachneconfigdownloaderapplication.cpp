@@ -11,6 +11,8 @@ const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
 ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc, char** argv)
     : QApplication(argc, argv)
 {
+    Settings &settings = Settings::getInstance();
+
     setOrganizationName("Claas Nieslony");
     setOrganizationDomain("nieslony.at");
     setApplicationName("Arachne Config Downloader");
@@ -18,6 +20,8 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc,
     setQuitOnLastWindowClosed(false);
 
     createTrayIcon();
+    if (settings.autoDownload())
+        QTimer::singleShot(settings.downloadDeleayMsec(), this, &ArachneConfigDownloaderApplication::onStartup);
 }
 
 void ArachneConfigDownloaderApplication::createTrayIcon()
@@ -54,3 +58,17 @@ void ArachneConfigDownloaderApplication::onSettings()
     dlg.exec();
 }
 
+void ArachneConfigDownloaderApplication::onStartup()
+{
+    Settings &settings = Settings::getInstance();
+
+    onDownloadNow();
+
+    connect(&timer, &QTimer::timeout, this, &ArachneConfigDownloaderApplication::onDownloadNow);
+    timer.start(settings.downloadIntervalMsec());
+}
+
+QTimer &ArachneConfigDownloaderApplication::downloadTimer()
+{
+    return timer;
+}
