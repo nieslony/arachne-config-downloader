@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <Product
+    Id='@GUID@'
+    Language="1033"
+    Manufacturer='Claas Nieslony'
+    Name='@NAME@ @VERSION@'
+    UpgradeCode='ABCDDCBA-7349-453F-94F6-BCB5110BA4FD'
+    Version='@VERSION@'
+    >
+
+    <Package InstallScope="perMachine" Compressed="yes"/>
+    <MediaTemplate EmbedCab="yes"/>
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='CNI' Name='Claas Nieslony'>
+          <Directory Id='INSTALLDIR' Name='@NAME@ @VERSION@'>
+            <Component Id='MainExecutable' Guid='@GUID@'>
+              <File
+                Id='MainExecutable'
+                Source='release/ArachneConfigDownloader.exe'
+                KeyPath='yes'
+                />
+            </Component>
+            <?include dlls.wxi?>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id='Complete' Level='1'>
+      <ComponentRef Id='MainExecutable'/>
+      <?include componentsref.wxi?>
+    </Feature>
+
+  </Product>
+</Wix>

@@ -1,4 +1,5 @@
-QT       += core gui dbus network KIOCore
+QT       += core gui dbus network
+unix: QT += KIOCore
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,11 +12,14 @@ CONFIG += c++11
 SOURCES += \
     src/arachneconfigdownloaderapplication.cpp \
     src/dbus_extra.cpp \
+    src/download-windows.cpp \
     src/main.cpp \
     src/settings.cpp \
     src/settingsdialog.cpp
 unix: SOURCES += \
     src/download-linux.cpp
+win: SOURCES += \
+    src/download-windows.cpp
 
 HEADERS += \
     src/arachneconfigdownloaderapplication.h \
@@ -35,3 +39,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     ArachneConfigDownloader.qrc
+
+DISTFILES += \
+    arachnecdl.wxs \
+    build-msi.sh
