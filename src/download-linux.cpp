@@ -221,6 +221,7 @@ void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(
     }
     catch (DBusException ex) {
         qWarning() << ex.msg();
+        addNetworkManagerConnection(json);
     }
 }
 
