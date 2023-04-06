@@ -158,6 +158,6 @@ int Settings::buildTime(int timeSpan, TimeUnit unit)
 
 void Settings::sync()
 {
-    qDebug() << "Syncing settings";
+    qDebug() << "Syncing settings to" << settings.fileName();
     settings.sync();
 }

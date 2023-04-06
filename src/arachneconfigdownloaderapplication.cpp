@@ -1,6 +1,8 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "arachneconfigdownloaderapplication.h"
 #include "settingsdialog.h"
@@ -11,11 +13,11 @@ const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
 ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc, char** argv)
     : QApplication(argc, argv)
 {
-    Settings &settings = Settings::getInstance();
-
     setOrganizationName("Claas Nieslony");
     setOrganizationDomain("nieslony.at");
     setApplicationName("Arachne Config Downloader");
+
+    Settings &settings = Settings::getInstance();
 
     setQuitOnLastWindowClosed(false);
 
@@ -27,7 +29,7 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc,
 void ArachneConfigDownloaderApplication::createTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon(":/images/ovpncdl-green-16x16.png"));
+    trayIcon->setIcon(QIcon(":/resources/images/ovpncdl-green-16x16.png"));
     trayIcon->setToolTip(qApp->applicationName());
 
     QAction *downloadNowAction = new QAction(tr("Download now"), this);
@@ -35,6 +37,9 @@ void ArachneConfigDownloaderApplication::createTrayIcon()
 
     QAction *settingsAction = new QAction(tr("Settings..."), this);
     connect(settingsAction, &QAction::triggered, this, &ArachneConfigDownloaderApplication::onSettings);
+
+    QAction *configureArachne = new QAction(tr("Goto Arachne Configuration"), this);
+    connect(configureArachne, &QAction::triggered, this, &ArachneConfigDownloaderApplication::onGotoArachneConfiguration);
 
     QAction *aboutQtAction = new QAction(tr("About Qt"), this);
     connect(aboutQtAction, &QAction::triggered, this, &QApplication::aboutQt);
@@ -45,6 +50,7 @@ void ArachneConfigDownloaderApplication::createTrayIcon()
     QMenu *menu = new QMenu();
     menu->addAction(downloadNowAction);
     menu->addAction(settingsAction);
+    menu->addAction(configureArachne);
     menu->addSeparator();
     menu->addAction(aboutQtAction);
     menu->addAction(quitAction);
@@ -71,4 +77,10 @@ void ArachneConfigDownloaderApplication::onStartup()
 QTimer &ArachneConfigDownloaderApplication::downloadTimer()
 {
     return timer;
+}
+
+void ArachneConfigDownloaderApplication::onGotoArachneConfiguration()
+{
+    Settings &settings = Settings::getInstance();
+    QDesktopServices::openUrl (QUrl(settings.adminServerUrl()));
 }

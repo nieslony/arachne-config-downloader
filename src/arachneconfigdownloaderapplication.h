@@ -47,6 +47,7 @@ private slots:
     void onSettings();
     void onDownloadNow();
     void onStartup();
+    void onGotoArachneConfiguration();
 #ifdef Q_OS_LINUX
     void onDownloadJobResult(KJob*);
     void networkManagerCopyJobDone(KIO::Job*, const QUrl &from, const QUrl &to, const QDateTime&, bool, bool);

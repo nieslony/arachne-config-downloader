@@ -40,5 +40,7 @@ RESOURCES += \
     ArachneConfigDownloader.qrc
 
 DISTFILES += \
+    ArachneConfigDownloader.spec \
     arachnecdl.wxs \
-    build-msi.sh
+    build-msi.sh \
+    gen-archive.sh
