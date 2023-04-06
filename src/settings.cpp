@@ -1,0 +1,132 @@
+#include "settings.h"
+
+#include <QtNetwork/QHostInfo>
+#include <QDir>
+
+const QString Settings::SN_ADMIN_SERVER_URL("adminServerurl");
+const QString Settings::SN_IGNORE_SSL_ERRORS("ignoreSslErrors");
+const QString Settings::SN_AUTO_DOWNLOAD("autoDownload");
+const QString Settings::SN_DOWNLOAD_INTERVAL_UNIT("downloadIntervalUnit");
+const QString Settings::SN_DOWNLOAD_INTERVAL("downloadInterval");
+const QString Settings::SN_DOWNLOAD_DELAY_UNIT("downloadDelayUnit");
+const QString Settings::SN_DOWNLOAD_DELAY("downloadDelay");
+const QString Settings::SN_DOWNLOAD_TYPE("downloadType");
+const QString Settings::SN_DOWNLOAD_DESTINATION("downloadDestination");
+#ifdef Q_OS_LINUX
+const QString Settings::SN_CONNECTION_DBUS_PATH("connectionDBusPath");
+#endif
+
+Settings::Settings()
+{
+}
+
+QString Settings::adminServerUrl()
+{
+    static const QString defaultUrl(QString("http://arachne.%1/arachne").arg(QHostInfo::localDomainName()));
+    return settings.value(SN_ADMIN_SERVER_URL, defaultUrl).toString();
+}
+
+bool Settings::ignoreSslErrors()
+{
+    return settings.value(SN_IGNORE_SSL_ERRORS, false).toBool();
+}
+
+bool Settings::autoDownload()
+{
+    return settings.value(SN_AUTO_DOWNLOAD, true).toBool();
+}
+
+Settings::TimeUnit Settings::downloadIntervalUnit()
+{
+    return static_cast<TimeUnit>(settings.value(SN_DOWNLOAD_INTERVAL_UNIT, MIN).toInt());
+}
+
+int Settings::downloadInterval()
+{
+    return settings.value(SN_DOWNLOAD_INTERVAL, 60).toInt();
+}
+
+Settings::TimeUnit Settings::downloadDelayUnit()
+{
+    return static_cast<TimeUnit>(settings.value(SN_DOWNLOAD_DELAY_UNIT, MIN).toInt());
+}
+
+int Settings::downloadDelay()
+{
+    return settings.value(SN_DOWNLOAD_DELAY, 5).toInt();
+}
+
+Settings::DownloadType Settings::downloadType()
+{
+    return static_cast<DownloadType>(settings.value(SN_DOWNLOAD_TYPE, NETWORK_MANAGER).toInt());
+}
+
+QString Settings::downloadDestination()
+{
+    static const QString defaultDestination("~/.openvpn");
+    return settings.value(SN_DOWNLOAD_DESTINATION, defaultDestination).toString();
+}
+
+#ifdef Q_OS_LINUX
+QString Settings::certsFolder()
+{
+    return QDir::homePath() + "/.certs";
+}
+
+QString Settings::connectionDBusPath()
+{
+    return settings.value(SN_CONNECTION_DBUS_PATH).toString();
+}
+#endif
+
+void Settings::setAdminServerUrl(const QString& url)
+{
+    settings.setValue(SN_ADMIN_SERVER_URL, url);
+}
+
+void Settings::setIgnoreSslErrors(bool ignore)
+{
+    settings.setValue(SN_IGNORE_SSL_ERRORS, ignore);
+}
+
+void Settings::setAutoDownload(bool ad)
+{
+    settings.setValue(SN_AUTO_DOWNLOAD, ad);
+}
+
+void Settings::setDownloadIntervalUnit(TimeUnit tu)
+{
+    settings.setValue(SN_DOWNLOAD_INTERVAL_UNIT, tu);
+}
+
+void Settings::setDownloadInterval(int interval)
+{
+    settings.setValue(SN_DOWNLOAD_INTERVAL, interval);
+}
+
+void Settings::setDownloadDelayUnit(TimeUnit tu)
+{
+    settings.setValue(SN_DOWNLOAD_DELAY_UNIT, tu);
+}
+
+void Settings::setDownloadDelay(int delay)
+{
+    settings.setValue(SN_DOWNLOAD_DELAY, delay);
+}
+
+void Settings::setDownloadType(DownloadType dt)
+{
+    settings.setValue(SN_DOWNLOAD_TYPE, dt);
+}
+
+void Settings::setDownloadDestination(const QString &dest)
+{
+    settings.setValue(SN_DOWNLOAD_DESTINATION, dest);
+}
+
+#ifdef Q_OS_LINUX
+void Settings::setConnectionDBusPath(const QString &path)
+{
+    settings.setValue(SN_CONNECTION_DBUS_PATH, path);
+}
+#endif
