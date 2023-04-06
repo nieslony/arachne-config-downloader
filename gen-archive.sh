@@ -8,5 +8,4 @@ git archive \
     --format=tar.gz \
     --prefix $PKG_VERSION/ \
     --output=$PKG_VERSION.tar.gz \
-    --add-file=ArachneConfigDownloader.spec \
     HEAD
