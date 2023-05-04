@@ -8,6 +8,7 @@ Summary:    Arachne Config Downloader
 Source:     %{name}-%{version}.tar.gz
 Url:        http://www.nieslony.at/arachne
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-linguist
 BuildRequires:  make
 BuildRequires:  kf5-kio-devel
 
