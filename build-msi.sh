@@ -93,3 +93,4 @@ wixl --verbose arachnecdl_parsed.wxs --output $MSI_FILE
 
 log MSI info
 msiinfo suminfo $MSI_FILE
+msiextract -l $MSI_FILE
