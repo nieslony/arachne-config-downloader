@@ -13,6 +13,9 @@ COMPONENT_REF_INCLUDE=componentsref.wxi
 EXE_FILE=release/ArachneConfigDownloader.exe
 MSI_FILE=ArachneConfigDownloader.msi
 NO_JOBS=$( cat /proc/cpuinfo | awk 'BEGIN { n=1; } /^processor/ { n++; } END { print n; }' )
+VERSION="$( cat $SRC_DIR/*spec | awk '/Version:/ { print $NF; }' )"
+NAME="$( cat $SRC_DIR/*spec | awk '/Name:/ { print $NF; }' )"
+MSI_GUID="$( uuid )"
 
 log Creating Makefile
 mingw64-qmake-qt5 -after \
@@ -83,7 +86,10 @@ cat <<EOF >> $COMPONENT_REF_INCLUDE
 EOF
 
 log Creating MSI
-wixl --verbose $SRC_DIR/arachnecdl.wxs --output $MSI_FILE
+cat $SRC_DIR/arachnecdl.wxs \
+    | sed -e "s/@GUID@/$MSI_GUID/g" -e "s/@NAME@/$NAME/g" -e "s/@VERSION@/$VERSION/g" \
+    > arachnecdl_parsed.wxs
+wixl --verbose arachnecdl_parsed.wxs --output $MSI_FILE
 
 log MSI info
 msiinfo suminfo $MSI_FILE
