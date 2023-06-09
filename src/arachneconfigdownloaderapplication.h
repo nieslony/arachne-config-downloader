@@ -21,7 +21,7 @@ class ArachneConfigDownloaderApplication : public QApplication
 {
     Q_OBJECT
 public:
-    ArachneConfigDownloaderApplication(int argc, char** argv);
+    ArachneConfigDownloaderApplication(int &argc, char** argv);
     QTimer &downloadTimer();
 
     static const QString USER_CONFIG_API_PATH;

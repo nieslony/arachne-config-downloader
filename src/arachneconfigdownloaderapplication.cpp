@@ -10,7 +10,7 @@
 const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
     = QString("/api/openvpn/user_config");
 
-ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int argc, char** argv)
+ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc, char** argv)
     : QApplication(argc, argv)
 {
     setOrganizationName("Claas Nieslony");
