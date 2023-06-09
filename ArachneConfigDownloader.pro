@@ -11,11 +11,11 @@ CONFIG += c++11
 
 SOURCES += \
     src/arachneconfigdownloaderapplication.cpp \
-    src/dbus_extra.cpp \
     src/main.cpp \
     src/settings.cpp \
     src/settingsdialog.cpp
 unix: SOURCES += \
+    # src/dbus_extra.cpp \
     src/download-linux.cpp
 windows: SOURCES += \
     src/download-windows.cpp
