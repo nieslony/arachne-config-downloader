@@ -26,7 +26,7 @@ void ArachneConfigDownloaderApplication::onDownloadNow()
 
     QString url = settings.adminServerUrl()
             + ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
-            + "?json";
+            + "?format=json";
     QUrl dest;
     if (settings.downloadType() == Settings::DownloadType::NETWORK_MANAGER) {
         QTemporaryFile tmpFile;
@@ -61,7 +61,6 @@ void ArachneConfigDownloaderApplication::onDownloadNow()
     else {
         qDebug() << "Cannot create copy job.";
     }
-
 }
 
 void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
@@ -84,7 +83,7 @@ void addKeyValue(QDBusArgument &arg, const QString &key, const QVariant &value)
 }
 
 void ArachneConfigDownloaderApplication::networkManagerCopyJobDone(
-        KIO::Job*, const QUrl &, const QUrl &to, const QDateTime&, bool, bool
+        KIO::Job* job, const QUrl& from, const QUrl &to, const QDateTime&, bool, bool
         )
 {
     QFile f(to.path());
@@ -93,12 +92,26 @@ void ArachneConfigDownloaderApplication::networkManagerCopyJobDone(
     f.close();
     f.remove();
 
+    if (job->error() != 0) {
+        qWarning() << QString("Error downloading from %1: %2")
+            .arg(from.toString())
+                          .arg(job->errorString());
+        return;
+    }
+
     QString conUuid = Settings::getInstance().connectionUuid();
-    qDebug() << "Found connetioUuid in settings: " << conUuid;
-    if (conUuid.isEmpty())
-        addNetworkManagerConnection(jsonStr);
-    else
-        updateNetworkManagerConnection(conUuid, jsonStr);
+    qDebug() << "Found connetionUuid in settings: " << conUuid;
+    try {
+        if (conUuid.isEmpty())
+            addNetworkManagerConnection(jsonStr);
+        else
+            updateNetworkManagerConnection(conUuid, jsonStr);
+    }
+    catch (NMException &ex) {
+        qCritical() << QString("Error processing result URL: %1: %2")
+                        .arg(from.toString())
+                        .arg(ex.msg());
+    }
 }
 
 void ArachneConfigDownloaderApplication::buildDBusArgument(
@@ -111,9 +124,10 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     QJsonParseError jsonError;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &jsonError);
     if (jsonDoc.isNull()) {
-        QString msg = QString("Cannot parse json at %1: %2")
+        QString msg = QString("Cannot parse json at %1: %2\n%3")
                 .arg(jsonError.offset)
-                .arg(jsonError.error);
+                .arg(jsonError.error)
+                          .arg(QString(json));
        throw NMException(msg);
     }
     QJsonObject jsonObj = jsonDoc.object();
