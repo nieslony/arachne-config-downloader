@@ -20,6 +20,8 @@
 #include <QIODevice>
 #include <KIO/CopyJob>
 
+#include <unistd.h>
+
 void ArachneConfigDownloaderApplication::onDownloadNow()
 {
     Settings &settings = Settings::getInstance();
@@ -167,7 +169,7 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
         {"type", "vpn"},
         {"autoconnect", false},
         {"permissions", QVariant(QList<QString>{
-             "user:claas"
+            "user:" + QString(getlogin())
          })
         }
     };
@@ -185,10 +187,9 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
         data.insert(key, value);
     }
 
-
     c.insert("vpn", QMap<QString,QVariant>{
                 {"service-type", "org.freedesktop.NetworkManager.openvpn"},
-                 {"data", QVariant::fromValue(data)}
+                {"data", QVariant::fromValue(data)}
              });
     arg << c;
 }
@@ -271,7 +272,7 @@ void ArachneConfigDownloaderApplication::addNetworkManagerConnection(const QByte
                 .value("connection")
                 .value("uuid")
                 .toString();
-        qDebug() << conUuid;
+        qDebug() << "Added conenction " << conUuid;
         settings.setConnectionUuid(conUuid);
     }
     catch (DBusException ex) {
