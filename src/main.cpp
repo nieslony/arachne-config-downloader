@@ -4,15 +4,20 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+
+#ifdef Q_OS_LINUX
 #include <QDBusArgument>
 #include <QDBusMetaType>
+#endif
 
 int main(int argc, char *argv[])
 {
     ArachneConfigDownloaderApplication a(argc, argv);
 
+#ifdef Q_OS_LINUX
     qDBusRegisterMetaType<StringMap>();
     qDBusRegisterMetaType<ConnectionSettings>();
+#endif
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
