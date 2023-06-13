@@ -71,7 +71,7 @@ QString Settings::downloadDestination()
 #ifdef Q_OS_LINUX
 QString Settings::certsFolder()
 {
-    return QDir::homePath() + "/.certs";
+    return QDir::homePath() + "/.cert";
 }
 
 QString Settings::connectionUuid()
