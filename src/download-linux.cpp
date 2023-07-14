@@ -312,16 +312,19 @@ void ArachneConfigDownloaderApplication::enableSystemTrayExtension()
     qInfo() << "Activating extension";
     // dbus-send --dest=org.gnome.Shell --print-reply --session /org/gnome/Shell org.gnome.Shell.Extensions.EnableExtension string:appindicatorsupport@rgcjonas.gmail.com
     try {
-        bool activated = dbus_call<bool>(
-            QString("org.gnome.Shell"),
-            QString("/org/gnome/Shell"),
-            QString("org.gnome.Shell.Extensions"),
-            QString("EnableExtension"),
-            QString("appindicatorsupport@rgcjonas.gmail.com")
+        QDBusConnection con = QDBusConnection::sessionBus();
+        QDBusInterface iface(
+            "org.gnome.Shell",
+            "/org/gnome/Shell",
+            "org.gnome.Shell.Extensions",
+            con
             );
-        qDebug() << "shell extension avtivated: " << activated;
+        QDBusReply<bool> reply =
+            iface.call("EnableExtension", QString("appindicatorsupport@rgcjonas.gmail.com"));
+        qDebug() << "shell extension avtivated: " << reply.value();
     }
     catch (DBusException ex) {
         qWarning() << ex.msg();
     }
+    qDebug() << "finished";
 }
