@@ -41,6 +41,7 @@ private:
                            const QByteArray&json,
                            const QString &conUuid="");
     void createFile(const QString &fileName, const QString &content, bool isPrivate=false);
+    void enableSystemTrayExtension();
 #endif
 
 private slots:

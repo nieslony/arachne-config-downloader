@@ -13,6 +13,10 @@ const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
 ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc, char** argv)
     : QApplication(argc, argv)
 {
+#ifdef Q_OS_LINUX
+    enableSystemTrayExtension();
+#endif
+
     setOrganizationName("Claas Nieslony");
     setOrganizationDomain("nieslony.at");
     setApplicationName("Arachne Config Downloader");

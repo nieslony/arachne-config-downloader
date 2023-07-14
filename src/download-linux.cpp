@@ -306,3 +306,22 @@ void ArachneConfigDownloaderApplication::createFile(
     if (isPrivate)
         f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
 }
+
+void ArachneConfigDownloaderApplication::enableSystemTrayExtension()
+{
+    qInfo() << "Activating extension";
+    // dbus-send --dest=org.gnome.Shell --print-reply --session /org/gnome/Shell org.gnome.Shell.Extensions.EnableExtension string:appindicatorsupport@rgcjonas.gmail.com
+    try {
+        bool activated = dbus_call<bool>(
+            QString("org.gnome.Shell"),
+            QString("/org/gnome/Shell"),
+            QString("org.gnome.Shell.Extensions"),
+            QString("EnableExtension"),
+            QString("appindicatorsupport@rgcjonas.gmail.com")
+            );
+        qDebug() << "shell extension avtivated: " << activated;
+    }
+    catch (DBusException ex) {
+        qWarning() << ex.msg();
+    }
+}
