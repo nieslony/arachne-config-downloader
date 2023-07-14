@@ -11,6 +11,7 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-linguist
 BuildRequires:  make
 BuildRequires:  kf5-kio-devel
+Recommends:     gnome-shell-extension-appindicator
 
 %if 0%{?suse_version}
 BuildRequires:  libqt5-qtbase-common-devel kio-devel kiconthemes-devel
