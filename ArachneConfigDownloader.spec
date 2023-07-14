@@ -51,8 +51,6 @@ desktop-file-edit --set-name=arachnecdl \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
     --set-key=Exec --set-value=arachnecdl \
-    --add-only-show-in="KDE" \
-    --add-category="KDE" \
     %{buildroot}/%{desktop_dir}/arachnecdl.desktop
 
 mkdir -pv %{buildroot}/%{autostart_dir}
@@ -62,8 +60,6 @@ desktop-file-edit --set-name=arachnecdl \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
     --set-key=Exec --set-value=arachnecdl \
-    --add-only-show-in="KDE" \
-    --add-category="KDE" \
     %{buildroot}/%{autostart_dir}/arachnecdl.desktop
 
 
