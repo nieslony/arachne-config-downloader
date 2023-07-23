@@ -15,6 +15,7 @@ const QString Settings::SN_DOWNLOAD_DESTINATION("downloadDestination");
 #ifdef Q_OS_LINUX
 const QString Settings::SN_CONNECTION_UUID("connectionUuid");
 #endif
+const QString Settings::SN_LAST_SUCCESSFUL_DOWNLOAD("lastSuccesfulDownload");
 
 Settings::Settings()
 {
@@ -160,4 +161,15 @@ void Settings::sync()
 {
     qDebug() << "Syncing settings to" << settings.fileName();
     settings.sync();
+}
+
+QDateTime Settings::lastSuccessfulDownload()
+{
+    return settings.value(SN_LAST_SUCCESSFUL_DOWNLOAD, QDateTime::fromSecsSinceEpoch(0)).toDateTime();
+}
+
+void Settings::touchSuccessfulDownload()
+{
+    QDateTime now = QDateTime::currentDateTimeUtc();
+    settings.setValue(SN_LAST_SUCCESSFUL_DOWNLOAD, now.currentSecsSinceEpoch());
 }

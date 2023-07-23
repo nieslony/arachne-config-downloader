@@ -27,11 +27,19 @@ public:
     static const QString USER_CONFIG_API_PATH;
 
 private:
+    enum DownloadStatus {
+        UNKNOWN,
+        SUCCESS,
+        OUTDATED,
+        FAILED
+    };
+
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QTimer timer;
 
     void createTrayIcon();
+    void setStatusIcon(DownloadStatus);
 #ifdef Q_OS_LINUX
     void addNetworkManagerConnection(const QByteArray&json);
     void updateNetworkManagerConnection(

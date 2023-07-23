@@ -1,12 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/images/ovpncdl-green-16x16.png</file>
         <file>resources/images/ovpncdl-green.svg</file>
-        <file>resources/images/ovpncdl-green-64x64.png</file>
-        <file>resources/images/ovpncdl-green-48x48.png</file>
-        <file>resources/images/ovpncdl-green-32x32.png</file>
-        <file>resources/images/ovpncdl-green-22x22.png</file>
         <file>resources/images/ovpncdl-red.svg</file>
         <file>resources/images/ovpncdl-yellow.svg</file>
+        <file>resources/images/ovpncdl-blue.svg</file>
     </qresource>
 </RCC>

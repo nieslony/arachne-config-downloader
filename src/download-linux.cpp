@@ -5,6 +5,7 @@
 #include <QTemporaryFile>
 #include <QFileInfo>
 #include <QUrl>
+#include <QDateTime>
 #include <QDir>
 #include <QDebug>
 #include <QtDBus/QDBusInterface>
@@ -15,10 +16,12 @@
 #include <QtDBus/QDBusObjectPath>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSystemTrayIcon>
 #include <QMetaType>
 #include <QTextStream>
 #include <QIODevice>
 #include <KIO/CopyJob>
+#include <KJobUiDelegate>
 
 #include <unistd.h>
 
@@ -51,7 +54,8 @@ void ArachneConfigDownloaderApplication::onDownloadNow()
     KIO::CopyJob *copyJob = KIO::copy(QUrl(url), dest, KIO::Overwrite | KIO::DefaultFlags);
 
     if (copyJob != NULL) {
-        copyJob->setUiDelegateExtension(0);
+        KJobUiDelegate *uiDelegate = new KJobUiDelegate();
+        copyJob->setUiDelegate(uiDelegate);
         connect(copyJob, &KIO::CopyJob::result,
                 this, &ArachneConfigDownloaderApplication::onDownloadJobResult);
         if (settings.downloadType() == Settings::DownloadType::NETWORK_MANAGER) {
@@ -68,12 +72,29 @@ void ArachneConfigDownloaderApplication::onDownloadNow()
 void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
 {
     KIO::CopyJob *copyJob = reinterpret_cast<KIO::CopyJob*>(job);
+    Settings &settings = Settings::getInstance();
 
     if (job->error() == 0) {
         qDebug() << "File copied to" << copyJob->destUrl().path();
+        setStatusIcon(SUCCESS);
+        trayIcon->showMessage("Configuration Updataed",
+                              "OpenVPN Configuration successfully downloaded");
+        settings.touchSuccessfulDownload();
+        settings.sync();
     }
     else {
-        qDebug() << "Job finished with error " << job->error() << job->errorString();
+        QString msg = QString("Error downloading %1: %2")
+                          .arg(copyJob->srcUrls().at(0).toString())
+                          .arg(job->errorString());
+        qDebug() << msg;
+        QDateTime lastDownload = settings.lastSuccessfulDownload();
+        QDateTime now = QDateTime::currentDateTimeUtc();
+        if (lastDownload.addMonths(1) < now)
+            setStatusIcon(FAILED);
+        else if (lastDownload.addDays(1) < now)
+            setStatusIcon(OUTDATED);
+
+        trayIcon->showMessage("Error", msg, QSystemTrayIcon::MessageIcon::Critical);
    }
 }
 

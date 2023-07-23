@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QString>
+#include <QDateTime>
 
 class Settings
 {
@@ -38,6 +39,7 @@ public:
     QString connectionUuid();
     QString certsFolder();
 #endif
+    QDateTime lastSuccessfulDownload();
 
     void setAdminServerUrl(const QString&);
     void setIgnoreSslErrors(bool);
@@ -51,6 +53,7 @@ public:
 #ifdef Q_OS_LINUX
     void setConnectionUuid(const QString&);
 #endif
+    void touchSuccessfulDownload();
 
     void sync();
 
@@ -71,6 +74,7 @@ private:
 #ifdef Q_OS_LINUX
     static const QString SN_CONNECTION_UUID;
 #endif
+    static const QString SN_LAST_SUCCESSFUL_DOWNLOAD;
 
     int buildTime(int timeSpan, TimeUnit unit);
 };

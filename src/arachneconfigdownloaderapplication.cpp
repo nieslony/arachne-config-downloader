@@ -33,7 +33,7 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc
 void ArachneConfigDownloaderApplication::createTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon(":/resources/images/ovpncdl-green-16x16.png"));
+    setStatusIcon(UNKNOWN);
     trayIcon->setToolTip(qApp->applicationName());
 
     QAction *downloadNowAction = new QAction(tr("Download now"), this);
@@ -87,4 +87,26 @@ void ArachneConfigDownloaderApplication::onGotoArachneConfiguration()
 {
     Settings &settings = Settings::getInstance();
     QDesktopServices::openUrl (QUrl(settings.adminServerUrl()));
+}
+
+void ArachneConfigDownloaderApplication::setStatusIcon(DownloadStatus status)
+{
+    QString iconName;
+
+    switch (status) {
+        case UNKNOWN:
+            iconName = ":/resources/images/ovpncdl-blue.svg";
+            break;
+        case SUCCESS:
+            iconName = ":/resources/images/ovpncdl-green.svg";
+            break;
+        case OUTDATED:
+            iconName = ":/resources/images/ovpncdl-yellow.svg";
+            break;
+        case FAILED:
+            iconName = ":/resources/images/ovpncdl-red.svg";
+            break;
+    }
+
+        trayIcon->setIcon(QIcon(QIcon(iconName).pixmap(128)));
 }
