@@ -62,6 +62,25 @@ desktop-file-edit --set-name=arachnecdl \
     --set-key=Exec --set-value=arachnecdl \
     %{buildroot}/%{autostart_dir}/arachnecdl.desktop
 
+%post
+CONF_DIR="/etc/xdg/Claas Nieslony"
+CONF_FILE="$CONF_DIR/Arachne Config Downloader.conf"
+if [ ! -e "$CONF_FILE" ]; then
+    DOMAINNAME=$( domainname )
+    mkdir -pv "$CONF_DIR"
+    cat <<EOF > "$CONF_FILE"
+[General]
+adminServerurl=http://arachne.$DOMAINNAME/arachne
+autoDownload=true
+downloadDelay=5
+downloadDelayUnit=1
+downloadDestination=~/.openvpn
+downloadInterval=60
+downloadIntervalUnit=1
+downloadType=0
+ignoreSslErrors=false
+EOF
+fi
 
 %files
 %{_bindir}/*
