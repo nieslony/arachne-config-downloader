@@ -5,9 +5,12 @@
 #include <QTemporaryFile>
 #include <QFileInfo>
 #include <QUrl>
+#include <QHostAddress>
 #include <QDateTime>
 #include <QDir>
 #include <QDebug>
+#include <QtEndian>
+#include <QJsonArray>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusReply>
@@ -217,8 +220,27 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
              });
 
     QMap<QString, QVariant> ipv4;
-    ipv4.insert("never-default", true);
+    bool neverDefault = ipv4Obj.value("never-default").toBool();
+    ipv4.insert("never-default", neverDefault);
     ipv4.insert("method", "auto");
+    QStringList dnsSearch;
+    for (auto s: ipv4Obj.value("dns-search").toArray()) {
+        dnsSearch.append(s.toString());
+    }
+    ipv4.insert("dns-search", dnsSearch);
+    Uint32List dnsServers;
+    for (auto v: ipv4Obj.value("dns").toArray()) {
+        QHostAddress addr(v.toString());
+        quint32 ip = qFromBigEndian(addr.toIPv4Address());
+        dnsServers.append(ip);
+        qInfo() << "DNS: " << v.toString() << addr.toIPv4Address();
+    }
+    qInfo() << "DNS servers: " << dnsServers;
+    QVariant dnsServersV;
+    dnsServersV.setValue(dnsServers);
+    ipv4.insert("dns", dnsServersV);
+    qInfo() << ipv4;
+
     c.insert("ipv4", ipv4);
 
     arg << c;
