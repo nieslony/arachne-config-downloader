@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_LINUX
     qDBusRegisterMetaType<StringMap>();
     qDBusRegisterMetaType<ConnectionSettings>();
+    qDBusRegisterMetaType<Uint32List>();
 #endif
 
     QTranslator translator;

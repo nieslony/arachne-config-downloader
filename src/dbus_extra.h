@@ -11,11 +11,18 @@
 class QDBusConnection;
 
 typedef QMap<QString,QString> StringMap;
+typedef QList<quint32> Uint32List;
 
 QDBusArgument &operator<<(QDBusArgument &argument, const StringMap &map);
 const QDBusArgument &operator>>(const QDBusArgument &argument, StringMap &map);
+QDBusArgument &operator<<(QDBusArgument &argument, const Uint32List &l);
+const QDBusArgument &operator>>(const QDBusArgument &argument, Uint32List &l);
+
+QDebug operator<<(QDebug dbg, const Uint32List&);
 
 Q_DECLARE_METATYPE(StringMap)
+Q_DECLARE_METATYPE(Uint32List)
+
 
 class NMException {
 public:
