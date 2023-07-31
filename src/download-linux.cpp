@@ -172,9 +172,13 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     if (privateKey.isEmpty())
         throw NMException("No privateKey provided in jsoin");
 
-    QJsonObject dataObj = jsonObj.take("connection").toObject();
+    QJsonObject dataObj = jsonObj.take("data").toObject();
     if (dataObj.isEmpty())
-        throw NMException("No connction data provided in json");
+        throw NMException("No connection data provided in json");
+
+    QJsonObject ipv4Obj = jsonObj.take("ipv4").toObject();
+    if (ipv4Obj.isEmpty())
+        throw NMException("No ipv4 provided in json");
 
     QString caFileName(settings.certsFolder() + "/arachne-ca.crt");
     QString certFileName(settings.certsFolder() + "/arachne-cert.crt");
@@ -196,8 +200,8 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     };
     if (!conUuid.isEmpty())
         conSettings.insert("uuid", conUuid);
-
     c.insert("connection", conSettings);
+
     StringMap data;
     data.insert("ca", caFileName);
     data.insert("cert", certFileName);
@@ -207,11 +211,16 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
         qDebug().noquote().nospace() << "Data setting " << key << "=" << value;
         data.insert(key, value);
     }
-
     c.insert("vpn", QMap<QString,QVariant>{
                 {"service-type", "org.freedesktop.NetworkManager.openvpn"},
                 {"data", QVariant::fromValue(data)}
              });
+
+    QMap<QString, QVariant> ipv4;
+    ipv4.insert("never-default", true);
+    ipv4.insert("method", "auto");
+    c.insert("ipv4", ipv4);
+
     arg << c;
 }
 
