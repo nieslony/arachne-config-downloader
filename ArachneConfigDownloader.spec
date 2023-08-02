@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:       ArachneConfigDownloader
-Version:    0.1.1
+Version:    0.1.2.git
 Release:    1
 License:    GPLv3
 Summary:    Arachne Config Downloader
