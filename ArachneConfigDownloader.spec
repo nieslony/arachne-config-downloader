@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:       ArachneConfigDownloader
-Version:    0.1.2.git
+Version:    0.1.2
 Release:    1
 License:    GPLv3
 Summary:    Arachne Config Downloader
@@ -41,7 +41,7 @@ make %{?_smp_mflags}
 %install
 mkdir -vp %{buildroot}/%{_bindir}
 install \
-    %{_builddir}/%{name}-%{version}/ArachneConfigDownloader \
+    %{_builddir}/%{?buildsubdir}/ArachneConfigDownloader \
     %{buildroot}/%{_bindir}/arachnecdl
 
 mkdir -pv %{buildroot}/%{desktop_dir}
