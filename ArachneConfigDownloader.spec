@@ -89,5 +89,8 @@ fi
 %license LICENSE
 
 %changelog
+* Fri Jan 12 2024 Claas Nieslony <github@nieslony.at> 0.1.2-1
+- new package built with tito
+
 * Thu Apr 06 2023 Claas Nieslony <claas@nieslony.at> 0.1.0
 - Initial version
