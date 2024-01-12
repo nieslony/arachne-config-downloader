@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:       ArachneConfigDownloader
-Version:    0.1.2
+Version:    0.1.3
 Release:    1
 License:    GPLv3
 Summary:    Arachne Config Downloader
@@ -89,6 +89,9 @@ fi
 %license LICENSE
 
 %changelog
+* Fri Jan 12 2024 Claas Nieslony <github@nieslony.at> 0.1.3-1
+- 
+
 * Fri Jan 12 2024 Claas Nieslony <github@nieslony.at> 0.1.2-1
 - new package built with tito
 
