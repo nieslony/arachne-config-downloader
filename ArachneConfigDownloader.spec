@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:       ArachneConfigDownloader
-Version:    0.1.2.git
+Version:    0.1.3
 Release:    1
 License:    GPLv3
 Summary:    Arachne Config Downloader
@@ -41,7 +41,7 @@ make %{?_smp_mflags}
 %install
 mkdir -vp %{buildroot}/%{_bindir}
 install \
-    %{_builddir}/%{name}-%{version}/ArachneConfigDownloader \
+    %{_builddir}/%{?buildsubdir}/ArachneConfigDownloader \
     %{buildroot}/%{_bindir}/arachnecdl
 
 mkdir -pv %{buildroot}/%{desktop_dir}
@@ -89,5 +89,11 @@ fi
 %license LICENSE
 
 %changelog
+* Fri Jan 12 2024 Claas Nieslony <github@nieslony.at> 0.1.3-1
+- 
+
+* Fri Jan 12 2024 Claas Nieslony <github@nieslony.at> 0.1.2-1
+- new package built with tito
+
 * Thu Apr 06 2023 Claas Nieslony <claas@nieslony.at> 0.1.0
 - Initial version
