@@ -2,6 +2,7 @@
 
 #include <QtNetwork/QHostInfo>
 #include <QDir>
+#include <QTimeZone>
 
 const QString Settings::SN_ADMIN_SERVER_URL("adminServerurl");
 const QString Settings::SN_IGNORE_SSL_ERRORS("ignoreSslErrors");
@@ -165,7 +166,8 @@ void Settings::sync()
 
 QDateTime Settings::lastSuccessfulDownload()
 {
-    return settings.value(SN_LAST_SUCCESSFUL_DOWNLOAD, QDateTime::fromSecsSinceEpoch(0)).toDateTime();
+    int secs = settings.value(SN_LAST_SUCCESSFUL_DOWNLOAD, 0).toInt();
+    return QDateTime::fromSecsSinceEpoch(secs, QTimeZone::utc());
 }
 
 void Settings::touchSuccessfulDownload()

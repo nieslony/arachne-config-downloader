@@ -1,7 +1,5 @@
-QT       += core gui dbus network
+QT       += core gui dbus network widgets
 unix: QT += KIOCore
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
