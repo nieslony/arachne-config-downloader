@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QObject>
 #include <QTimer>
+#include <QDateTime>
 
 class QSystemTrayIcon;
 class QMenu;
@@ -40,6 +41,7 @@ private:
 
     void createTrayIcon();
     void setStatusIcon(DownloadStatus);
+    void updateLastDownload(const QDateTime&when = QDateTime::currentDateTimeUtc());
 #ifdef Q_OS_LINUX
     void addNetworkManagerConnection(const QByteArray&json);
     void updateNetworkManagerConnection(

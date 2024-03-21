@@ -28,13 +28,29 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc
     createTrayIcon();
     if (settings.autoDownload())
         QTimer::singleShot(settings.downloadDeleayMsec(), this, &ArachneConfigDownloaderApplication::onStartup);
+
+    updateLastDownload(settings.lastSuccessfulDownload());
+}
+
+void ArachneConfigDownloaderApplication::updateLastDownload(const QDateTime&when)
+{
+    QLocale locale;
+    QString msg("%1\nLast Configuration Update: %2");
+    trayIcon->setToolTip(
+        msg
+            .arg(qApp->applicationDisplayName())
+            .arg(
+                when.toSecsSinceEpoch() == 0
+                    ? "Never"
+                    : when.toLocalTime().toString(locale.dateTimeFormat(QLocale::ShortFormat))
+                )
+        );
 }
 
 void ArachneConfigDownloaderApplication::createTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(this);
     setStatusIcon(UNKNOWN);
-    trayIcon->setToolTip(qApp->applicationName());
 
     QAction *downloadNowAction = new QAction(tr("Download now"), this);
     connect(downloadNowAction, &QAction::triggered, this, &ArachneConfigDownloaderApplication::onDownloadNow);
@@ -59,6 +75,7 @@ void ArachneConfigDownloaderApplication::createTrayIcon()
     menu->addAction(aboutQtAction);
     menu->addAction(quitAction);
     trayIcon->setContextMenu(menu);
+
     trayIcon->show();
 }
 

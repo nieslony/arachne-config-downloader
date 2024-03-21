@@ -85,6 +85,7 @@ void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
                               "OpenVPN Configuration successfully downloaded");
         settings.touchSuccessfulDownload();
         settings.sync();
+        updateLastDownload();
     }
     else {
         QString msg = QString("Error downloading %1: %2")
