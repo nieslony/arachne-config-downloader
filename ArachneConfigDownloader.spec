@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:       ArachneConfigDownloader
-Version:    1.4
+Version:    1.5
 Release:    1
 License:    GPLv3
 Summary:    Arachne Config Downloader
@@ -89,6 +89,9 @@ fi
 %license LICENSE
 
 %changelog
+* Thu Mar 21 2024 Claas Nieslony <github@nieslony.at> 1.5-1
+- Show last successful download (github@nieslony.at)
+
 * Wed Jan 17 2024 Claas Nieslony <claas@nieslony.at> 1.4-1
 - Fix: show download errors (claas@nieslony.at)
 
