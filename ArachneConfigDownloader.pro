@@ -40,6 +40,7 @@ RESOURCES += \
     ArachneConfigDownloader.qrc
 
 DISTFILES += \
+    .gitignore \
     ArachneConfigDownloader.spec \
     arachnecdl.wxs \
     build-msi.sh \
