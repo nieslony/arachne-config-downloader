@@ -20,6 +20,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSystemTrayIcon>
+#include <QTimeZone>
 #include <QMetaType>
 #include <QTextStream>
 #include <QIODevice>
@@ -96,6 +97,8 @@ void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
             setStatusIcon(FAILED);
         else if (lastDownload.addDays(1) < now)
             setStatusIcon(OUTDATED);
+        else
+            setStatusIcon(SUCCESS);
 
         trayIcon->showMessage("Error", msg, QSystemTrayIcon::MessageIcon::Critical);
    }
