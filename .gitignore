@@ -1,3 +1,5 @@
 *~
 *tar.gz
-ArachneConfigDownloader.pro.user
+*.user
+*build
+
