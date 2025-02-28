@@ -4,19 +4,19 @@
 #include <QDir>
 #include <QTimeZone>
 
-const QString Settings::SN_ADMIN_SERVER_URL("adminServerurl");
-const QString Settings::SN_IGNORE_SSL_ERRORS("ignoreSslErrors");
-const QString Settings::SN_AUTO_DOWNLOAD("autoDownload");
-const QString Settings::SN_DOWNLOAD_INTERVAL_UNIT("downloadIntervalUnit");
-const QString Settings::SN_DOWNLOAD_INTERVAL("downloadInterval");
-const QString Settings::SN_DOWNLOAD_DELAY_UNIT("downloadDelayUnit");
-const QString Settings::SN_DOWNLOAD_DELAY("downloadDelay");
-const QString Settings::SN_DOWNLOAD_TYPE("downloadType");
-const QString Settings::SN_DOWNLOAD_DESTINATION("downloadDestination");
+const QString Settings::SN_ADMIN_SERVER_URL(QString::fromUtf8("adminServerurl"));
+const QString Settings::SN_IGNORE_SSL_ERRORS(QString::fromUtf8("ignoreSslErrors"));
+const QString Settings::SN_AUTO_DOWNLOAD(QString::fromUtf8("autoDownload"));
+const QString Settings::SN_DOWNLOAD_INTERVAL_UNIT(QString::fromUtf8("downloadIntervalUnit"));
+const QString Settings::SN_DOWNLOAD_INTERVAL(QString::fromUtf8("downloadInterval"));
+const QString Settings::SN_DOWNLOAD_DELAY_UNIT(QString::fromUtf8("downloadDelayUnit"));
+const QString Settings::SN_DOWNLOAD_DELAY(QString::fromUtf8("downloadDelay"));
+const QString Settings::SN_DOWNLOAD_TYPE(QString::fromUtf8("downloadType"));
+const QString Settings::SN_DOWNLOAD_DESTINATION(QString::fromUtf8("downloadDestination"));
 #ifdef Q_OS_LINUX
-const QString Settings::SN_CONNECTION_UUID("connectionUuid");
+const QString Settings::SN_CONNECTION_UUID(QString::fromUtf8("connectionUuid"));
 #endif
-const QString Settings::SN_LAST_SUCCESSFUL_DOWNLOAD("lastSuccesfulDownload");
+const QString Settings::SN_LAST_SUCCESSFUL_DOWNLOAD(QString::fromUtf8("lastSuccesfulDownload"));
 
 Settings::Settings()
 {
@@ -25,7 +25,7 @@ Settings::Settings()
 
 QString Settings::adminServerUrl()
 {
-    static const QString defaultUrl(QString("http://arachne.%1/arachne").arg(QHostInfo::localDomainName()));
+    static const QString defaultUrl(QString::fromUtf8("http://arachne.%1/arachne").arg(QHostInfo::localDomainName()));
     return settings.value(SN_ADMIN_SERVER_URL, defaultUrl).toString();
 }
 
@@ -66,14 +66,14 @@ Settings::DownloadType Settings::downloadType()
 
 QString Settings::downloadDestination()
 {
-    static const QString defaultDestination("~/.openvpn");
+    static const QString defaultDestination(QString::fromUtf8("~/.openvpn"));
     return settings.value(SN_DOWNLOAD_DESTINATION, defaultDestination).toString();
 }
 
 #ifdef Q_OS_LINUX
 QString Settings::certsFolder()
 {
-    return QDir::homePath() + "/.cert";
+    return QDir::homePath() + QString::fromUtf8("/.cert");
 }
 
 QString Settings::connectionUuid()

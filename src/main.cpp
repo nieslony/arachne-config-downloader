@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
-        const QString baseName = "ArachneConfigDownloader_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
+        const QString baseName = QString::fromUtf8("ArachneConfigDownloader_") + QLocale(locale).name();
+        if (translator.load(QString::fromUtf8(":/i18n/") + baseName)) {
             a.installTranslator(&translator);
             break;
         }

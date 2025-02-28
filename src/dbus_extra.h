@@ -62,7 +62,7 @@ QDBusReply<T> dbus_call(
 {
     QDBusConnection con = QDBusConnection::systemBus();
     if (!con.isConnected())
-        throw DBusException("Cannot connect to the D-Bus system bus.");
+        throw DBusException(QString::fromUtf8("Cannot connect to the D-Bus system bus."));
 
     QDBusInterface iface(
             service,
@@ -72,7 +72,7 @@ QDBusReply<T> dbus_call(
             );
     if (!iface.isValid()) {
         throw DBusException(
-                    QString("Interface not valid: %1 %2")
+                    QString::fromUtf8("Interface not valid: %1 %2")
                     .arg(iface.lastError().name())
                     .arg(iface.lastError().message())
                     );
@@ -85,7 +85,7 @@ QDBusReply<T> dbus_call(
         reply = iface.call(method);
     if (!reply.isValid())
         throw DBusException(
-                QString("Cannot call %1 on %2: %3: %4")
+                QString::fromUtf8("Cannot call %1 on %2: %3: %4")
                 .arg(method)
                 .arg(path)
                 .arg(reply.error().name())

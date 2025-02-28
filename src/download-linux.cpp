@@ -35,24 +35,24 @@ void ArachneConfigDownloaderApplication::onDownloadNow()
 
     QString url = settings.adminServerUrl()
             + ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
-            + "?format=json";
+            + QString::fromUtf8("?format=json");
     QUrl dest;
     if (settings.downloadType() == Settings::DownloadType::NETWORK_MANAGER) {
         QTemporaryFile tmpFile;
         tmpFile.open();
-        dest = QUrl("file://" + tmpFile.fileName());
+        dest = QUrl(QString::fromUtf8("file://") + tmpFile.fileName());
         tmpFile.close();
     }
     else {
         QString dir = settings.downloadDestination();
-        dir.replace("~", QDir::homePath());
+        dir.replace(QString::fromUtf8("~"), QDir::homePath());
         qDebug() << dir;
         QFileInfo fileInfo(dir);
         if (!fileInfo.exists()) {
-            QDir d("");
+            QDir d;
             d.mkpath(dir);
         }
-        dest = QUrl("file://" + dir);
+        dest = QUrl(QString::fromUtf8("file://") + dir);
     }
     qDebug() << "Downloading " << url << " to " << dest.toString();
     KIO::CopyJob *copyJob = KIO::copy(QUrl(url), dest, KIO::Overwrite | KIO::DefaultFlags);
@@ -81,14 +81,14 @@ void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
     if (job->error() == 0) {
         qDebug() << "File copied to" << copyJob->destUrl().path();
         setStatusIcon(SUCCESS);
-        trayIcon->showMessage("Configuration Updataed",
-                              "OpenVPN Configuration successfully downloaded");
+        trayIcon->showMessage(QString::fromUtf8("Configuration Updataed"),
+                              QString::fromUtf8("OpenVPN Configuration successfully downloaded"));
         settings.touchSuccessfulDownload();
         settings.sync();
         updateLastDownload();
     }
     else {
-        QString msg = QString("Error downloading %1: %2")
+        QString msg = QString::fromUtf8("Error downloading %1: %2")
                           .arg(copyJob->srcUrls().at(0).toString())
                           .arg(job->errorString());
         qDebug() << msg;
@@ -101,7 +101,7 @@ void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
         else
             setStatusIcon(SUCCESS);
 
-        trayIcon->showMessage("Error", msg, QSystemTrayIcon::MessageIcon::Critical);
+        trayIcon->showMessage(QString::fromUtf8("Error"), msg, QSystemTrayIcon::MessageIcon::Critical);
    }
 }
 
@@ -123,7 +123,7 @@ void ArachneConfigDownloaderApplication::networkManagerCopyJobDone(
     f.remove();
 
     if (job->error() != 0) {
-        qWarning() << QString("Error downloading from %1: %2")
+        qWarning() << QString::fromUtf8("Error downloading from %1: %2")
             .arg(from.toString())
                           .arg(job->errorString());
         return;
@@ -138,7 +138,7 @@ void ArachneConfigDownloaderApplication::networkManagerCopyJobDone(
             updateNetworkManagerConnection(conUuid, jsonStr);
     }
     catch (NMException &ex) {
-        qCritical() << QString("Error processing result URL: %1: %2")
+        qCritical() << QString::fromUtf8("Error processing result URL: %1: %2")
                         .arg(from.toString())
                         .arg(ex.msg());
     }
@@ -154,42 +154,42 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     QJsonParseError jsonError;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &jsonError);
     if (jsonDoc.isNull()) {
-        QString msg = QString("Cannot parse json at %1: %2\n%3")
+        QString msg = QString::fromUtf8("Cannot parse json at %1: %2\n%3")
                 .arg(jsonError.offset)
                 .arg(jsonError.error)
-                          .arg(QString(json));
+                          .arg(QString::fromUtf8(json));
        throw NMException(msg);
     }
     QJsonObject jsonObj = jsonDoc.object();
-    QString connectionName = jsonObj.take("name").toString();
+    QString connectionName = jsonObj.take(QString::fromUtf8("name")).toString();
     if (connectionName.isEmpty())
-        throw NMException("No connection name provided");
-    QJsonValue value = jsonObj.take("certificates");
+        throw NMException(QString::fromUtf8("No connection name provided"));
+    QJsonValue value = jsonObj.take(QString::fromUtf8("certificates"));
     if (value.isUndefined()) {
-        throw NMException("No connection found in json");
+        throw NMException(QString::fromUtf8("No connection found in json"));
     }
     QJsonObject connectionObj = value.toObject();
-    QString userCert = connectionObj.take("userCert").toString();
+    QString userCert = connectionObj.take(QString::fromUtf8("userCert")).toString();
     if (userCert.isEmpty())
-        throw NMException("No userCert privided in json");
-    QString caCert = connectionObj.take("caCert").toString();
+        throw NMException(QString::fromUtf8("No userCert privided in json"));
+    QString caCert = connectionObj.take(QString::fromUtf8("caCert")).toString();
     if (caCert.isEmpty())
-        throw NMException("No caCert provided in json");
-    QString privateKey = connectionObj.take("privateKey").toString();
+        throw NMException(QString::fromUtf8("No caCert provided in json"));
+    QString privateKey = connectionObj.take(QString::fromUtf8("privateKey")).toString();
     if (privateKey.isEmpty())
-        throw NMException("No privateKey provided in jsoin");
+        throw NMException(QString::fromUtf8("No privateKey provided in jsoin"));
 
-    QJsonObject dataObj = jsonObj.take("data").toObject();
+    QJsonObject dataObj = jsonObj.take(QString::fromUtf8("data")).toObject();
     if (dataObj.isEmpty())
-        throw NMException("No connection data provided in json");
+        throw NMException(QString::fromUtf8("No connection data provided in json"));
 
-    QJsonObject ipv4Obj = jsonObj.take("ipv4").toObject();
+    QJsonObject ipv4Obj = jsonObj.take(QString::fromUtf8("ipv4")).toObject();
     if (ipv4Obj.isEmpty())
-        throw NMException("No ipv4 provided in json");
+        throw NMException(QString::fromUtf8("No ipv4 provided in json"));
 
-    QString caFileName(settings.certsFolder() + "/arachne-ca.crt");
-    QString certFileName(settings.certsFolder() + "/arachne-cert.crt");
-    QString keyFileName(settings.certsFolder() + "/arachne-cert.key");
+    QString caFileName(settings.certsFolder() + QString::fromUtf8("/arachne-ca.crt"));
+    QString certFileName(settings.certsFolder() + QString::fromUtf8("/arachne-cert.crt"));
+    QString keyFileName(settings.certsFolder() + QString::fromUtf8("/arachne-cert.key"));
 
     createFile(caFileName, caCert);
     createFile(certFileName, userCert);
@@ -197,43 +197,43 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
 
     ConnectionSettings c;
     QMap<QString, QVariant> conSettings = {
-        {"id", connectionName},
-        {"type", "vpn"},
-        {"autoconnect", false},
-        {"permissions", QVariant(QList<QString>{
-            "user:" + QString(getlogin())
+        {QString::fromUtf8("id"), connectionName},
+        {QString::fromUtf8("type"), QString::fromUtf8("vpn")},
+        {QString::fromUtf8("autoconnect"), false},
+        {QString::fromUtf8("permissions"), QVariant(QList<QString>{
+            QString::fromUtf8("us<er:") + QString(QString::fromUtf8(getlogin()))
          })
         }
     };
     if (!conUuid.isEmpty())
-        conSettings.insert("uuid", conUuid);
-    c.insert("connection", conSettings);
+        conSettings.insert(QString::fromUtf8("uuid"), conUuid);
+    c.insert(QString::fromUtf8("connection"), conSettings);
 
     StringMap data;
-    data.insert("ca", caFileName);
-    data.insert("cert", certFileName);
-    data.insert("key", keyFileName);
+    data.insert(QString::fromUtf8("ca"), caFileName);
+    data.insert(QString::fromUtf8("cert"), certFileName);
+    data.insert(QString::fromUtf8("key"), keyFileName);
     for (const QString &key : dataObj.keys()) {
         QString value = dataObj.value(key).toString();
         qDebug().noquote().nospace() << "Data setting " << key << "=" << value;
         data.insert(key, value);
     }
-    c.insert("vpn", QMap<QString,QVariant>{
-                {"service-type", "org.freedesktop.NetworkManager.openvpn"},
-                {"data", QVariant::fromValue(data)}
+    c.insert(QString::fromUtf8("vpn"), QMap<QString,QVariant>{
+                {QString::fromUtf8("service-type"), QString::fromUtf8("org.freedesktop.NetworkManager.openvpn")},
+                {QString::fromUtf8("data"), QVariant::fromValue(data)}
              });
 
     QMap<QString, QVariant> ipv4;
-    bool neverDefault = ipv4Obj.value("never-default").toBool();
-    ipv4.insert("never-default", neverDefault);
-    ipv4.insert("method", "auto");
+    bool neverDefault = ipv4Obj.value(QString::fromUtf8("never-default")).toBool();
+    ipv4.insert(QString::fromUtf8("never-default"), neverDefault);
+    ipv4.insert(QString::fromUtf8("method"), QString::fromUtf8("auto"));
     QStringList dnsSearch;
-    for (auto s: ipv4Obj.value("dns-search").toArray()) {
+    for (auto s: ipv4Obj.value(QString::fromUtf8("dns-search")).toArray()) {
         dnsSearch.append(s.toString());
     }
-    ipv4.insert("dns-search", dnsSearch);
+    ipv4.insert(QString::fromUtf8("dns-search"), dnsSearch);
     Uint32List dnsServers;
-    for (auto v: ipv4Obj.value("dns").toArray()) {
+    for (auto v: ipv4Obj.value(QString::fromUtf8("dns")).toArray()) {
         QHostAddress addr(v.toString());
         quint32 ip = qFromBigEndian(addr.toIPv4Address());
         dnsServers.append(ip);
@@ -242,10 +242,10 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     qInfo() << "DNS servers: " << dnsServers;
     QVariant dnsServersV;
     dnsServersV.setValue(dnsServers);
-    ipv4.insert("dns", dnsServersV);
+    ipv4.insert(QString::fromUtf8("dns"), dnsServersV);
     qInfo() << ipv4;
 
-    c.insert("ipv4", ipv4);
+    c.insert(QString::fromUtf8("ipv4"), ipv4);
 
     arg << c;
 }
@@ -266,10 +266,10 @@ void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(
 
     try {
         QString conPath = dbus_call<QDBusObjectPath>(
-                    QString("org.freedesktop.NetworkManager"),
-                    QString("/org/freedesktop/NetworkManager/Settings"),
-                    QString("org.freedesktop.NetworkManager.Settings"),
-                    QString("GetConnectionByUuid"), QVariant(conUuid)
+                    QString::fromUtf8("org.freedesktop.NetworkManager"),
+                    QString::fromUtf8("/org/freedesktop/NetworkManager/Settings"),
+                    QString::fromUtf8("org.freedesktop.NetworkManager.Settings"),
+                    QString::fromUtf8("GetConnectionByUuid"), QVariant(conUuid)
                     )
                 .value().path();
         qDebug() << "Found connection:" << conPath;
@@ -283,10 +283,10 @@ void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(
         }
 
         dbus_call<void>(
-                            QString("org.freedesktop.NetworkManager"),
+                            QString::fromUtf8("org.freedesktop.NetworkManager"),
                             conPath,
-                            QString("org.freedesktop.NetworkManager.Settings.Connection"),
-                            QString("Update"), QVariant::fromValue(arg)
+                            QString::fromUtf8("org.freedesktop.NetworkManager.Settings.Connection"),
+                            QString::fromUtf8("Update"), QVariant::fromValue(arg)
                             );
         qDebug() << "Connection" << conUuid << "updated";
     }
@@ -312,21 +312,21 @@ void ArachneConfigDownloaderApplication::addNetworkManagerConnection(const QByte
 
     try {
         QString conPath = dbus_call<QDBusObjectPath>(
-                    QString("org.freedesktop.NetworkManager"),
-                    QString("/org/freedesktop/NetworkManager/Settings"),
-                    QString("org.freedesktop.NetworkManager.Settings"),
-                    QString("AddConnection"), QVariant::fromValue(arg)
+                    QString::fromUtf8("org.freedesktop.NetworkManager"),
+                    QString::fromUtf8("/org/freedesktop/NetworkManager/Settings"),
+                    QString::fromUtf8("org.freedesktop.NetworkManager.Settings"),
+                    QString::fromUtf8("AddConnection"), QVariant::fromValue(arg)
                     )
                 .value().path();
 
         QString conUuid = dbus_call<ConnectionSettings>(
-                    QString("org.freedesktop.NetworkManager"),
+                    QString::fromUtf8("org.freedesktop.NetworkManager"),
                     conPath,
-                    QString("org.freedesktop.NetworkManager.Settings.Connection"),
-                    QString("GetSettings"), QVariant())
+                    QString::fromUtf8("org.freedesktop.NetworkManager.Settings.Connection"),
+                    QString::fromUtf8("GetSettings"), QVariant())
                 .value()
-                .value("connection")
-                .value("uuid")
+                .value(QString::fromUtf8("connection"))
+                .value(QString::fromUtf8("uuid"))
                 .toString();
         qDebug() << "Added conenction " << conUuid;
         settings.setConnectionUuid(conUuid);
@@ -343,18 +343,18 @@ void ArachneConfigDownloaderApplication::createFile(
         )
 {
     QString absFileName(fileName);
-    if (fileName.startsWith("~"))
-        absFileName.replace("~", QDir::homePath());
+    if (fileName.startsWith(QString::fromUtf8("~")))
+        absFileName.replace(QString::fromUtf8("~"), QDir::homePath());
     QFileInfo fi(absFileName);
 
     QDir dir;
     if (!dir.mkpath(fi.dir().absolutePath()))
-        throw NMException("Cannot create folder " + fi.dir().absolutePath());
+        throw NMException(QString::fromUtf8("Cannot create folder ") + fi.dir().absolutePath());
 
     qDebug() << "Writing " << fileName;
     QFile f(absFileName);
     if (!f.open(QIODevice::WriteOnly | QFileDevice::Text))
-        throw NMException("Cannot open " + absFileName);
+        throw NMException(QString::fromUtf8("Cannot open ") + absFileName);
     QTextStream stream(&f);
     stream << content;
     f.close();
@@ -370,13 +370,13 @@ void ArachneConfigDownloaderApplication::enableSystemTrayExtension()
     try {
         QDBusConnection con = QDBusConnection::sessionBus();
         QDBusInterface iface(
-            "org.gnome.Shell",
-            "/org/gnome/Shell",
-            "org.gnome.Shell.Extensions",
+            QString::fromUtf8("org.gnome.Shell"),
+            QString::fromUtf8("/org/gnome/Shell"),
+            QString::fromUtf8("org.gnome.Shell.Extensions"),
             con
             );
         QDBusReply<bool> reply =
-            iface.call("EnableExtension", QString("appindicatorsupport@rgcjonas.gmail.com"));
+            iface.call(QString::fromUtf8("EnableExtension"), QString::fromUtf8("appindicatorsupport@rgcjonas.gmail.com"));
         qDebug() << "shell extension avtivated: " << reply.value();
     }
     catch (DBusException ex) {

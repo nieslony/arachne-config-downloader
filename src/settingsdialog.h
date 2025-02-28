@@ -31,7 +31,7 @@ private:
     void loadSettings();
     void saveSettings();
 
-private slots:
+private Q_SLOTS:
     void onToggleAutoDownload(bool);
     void onChangeDownloadType(int);
 };

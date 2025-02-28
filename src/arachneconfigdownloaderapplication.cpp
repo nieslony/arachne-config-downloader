@@ -8,7 +8,7 @@
 #include "settingsdialog.h"
 
 const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
-    = QString("/api/openvpn/user_config");
+    = QString::fromUtf8("/api/openvpn/user_config");
 
 ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc, char** argv)
     : QApplication(argc, argv)
@@ -17,9 +17,9 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc
     enableSystemTrayExtension();
 #endif
 
-    setOrganizationName("Claas Nieslony");
-    setOrganizationDomain("nieslony.at");
-    setApplicationName("Arachne Config Downloader");
+    setOrganizationName(QString::fromUtf8("Claas Nieslony"));
+    setOrganizationDomain(QString::fromUtf8("nieslony.at"));
+    setApplicationName(QString::fromUtf8("Arachne Config Downloader"));
 
     Settings &settings = Settings::getInstance();
 
@@ -35,13 +35,13 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc
 void ArachneConfigDownloaderApplication::updateLastDownload(const QDateTime&when)
 {
     QLocale locale;
-    QString msg("%1\nLast Configuration Update: %2");
+    QString msg = QString::fromUtf8("%1\nLast Configuration Update: %2");
     trayIcon->setToolTip(
         msg
             .arg(qApp->applicationDisplayName())
             .arg(
                 when.toSecsSinceEpoch() == 0
-                    ? "Never"
+                    ? QString::fromUtf8("Never")
                     : when.toLocalTime().toString(locale.dateTimeFormat(QLocale::ShortFormat))
                 )
         );
@@ -112,16 +112,16 @@ void ArachneConfigDownloaderApplication::setStatusIcon(DownloadStatus status)
 
     switch (status) {
         case UNKNOWN:
-            iconName = ":/resources/images/ovpncdl-blue.svg";
+            iconName = QString::fromUtf8(":/resources/images/ovpncdl-blue.svg");
             break;
         case SUCCESS:
-            iconName = ":/resources/images/ovpncdl-green.svg";
+            iconName = QString::fromUtf8(":/resources/images/ovpncdl-green.svg");
             break;
         case OUTDATED:
-            iconName = ":/resources/images/ovpncdl-yellow.svg";
+            iconName = QString::fromUtf8(":/resources/images/ovpncdl-yellow.svg");
             break;
         case FAILED:
-            iconName = ":/resources/images/ovpncdl-red.svg";
+            iconName = QString::fromUtf8(":/resources/images/ovpncdl-red.svg");
             break;
     }
 

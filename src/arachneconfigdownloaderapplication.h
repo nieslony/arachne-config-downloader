@@ -49,12 +49,12 @@ private:
             const QByteArray&json);
     void buildDBusArgument(QDBusArgument &arg,
                            const QByteArray&json,
-                           const QString &conUuid="");
+                           const QString &conUuid=QString());
     void createFile(const QString &fileName, const QString &content, bool isPrivate=false);
     void enableSystemTrayExtension();
 #endif
 
-private slots:
+private Q_SLOTS:
     void onSettings();
     void onDownloadNow();
     void onStartup();
