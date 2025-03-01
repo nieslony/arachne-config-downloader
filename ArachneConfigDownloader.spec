@@ -34,7 +34,7 @@ as .ovpn file or creates a NetwormManager connection
 %cmake_build
 
 %install
-%cmake_install
+%cmake_install --strip
 
 mkdir -pv %{buildroot}/%{desktop_dir}
 touch %{buildroot}/%{desktop_dir}/arachne-cdl.desktop
