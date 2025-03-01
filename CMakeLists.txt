@@ -58,3 +58,5 @@ target_link_libraries(arachne-cdl
     Qt::Widgets
     KF6::KIOCore
 )
+
+install(TARGETS arachne-cdl ${KDE_INSTALL_TARGET_ARGS})
