@@ -1,5 +1,8 @@
 %global debug_package %{nil}
 
+%define qt_version 6
+%define kf_version 6
+
 Name:       ArachneConfigDownloader
 Version:    1.5
 Release:    1
@@ -7,42 +10,32 @@ License:    GPLv3
 Summary:    Arachne Config Downloader
 Source:     %{name}-%{version}.tar.gz
 Url:        http://www.nieslony.at/arachne
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-linguist
+BuildRequires:  qt%{qt_verion}-qtbase-devel
+BuildRequires:  qt%{qt_verion}-linguist
 BuildRequires:  make
 BuildRequires:  kf5-kio-devel
 Recommends:     gnome-shell-extension-appindicator
 
-%if 0%{?suse_version}
-BuildRequires:  libqt5-qtbase-common-devel kio-devel kiconthemes-devel
-BuildRequires:  update-desktop-files
-%define icons_dir %{_kf5_iconsdir}
-%define desktop_dir %{_kf5_applicationsdir}
-%define autostart_dir   %{_sysconfdir}/xdg/autostart
-%else
-BuildRequires:  qt5-qtbase-devel kf5-kio-devel kf5-kiconthemes-devel
-BuildRequires:  desktop-file-utils kf5-rpm-macros
+BuildRequires:  qt%{qt_verion}-qtbase-devel
+BuildRequires:  kf%{kf_versiopn}-kio-devel kf%{kf_versiopn}-kiconthemes-devel
+BuildRequires:  desktop-file-utils kf%{kf_versiopn}-rpm-macros
 %define icons_dir   %{_datadir}/icons
 %define desktop_dir %{_datadir}/applications
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
-%endif
 
 %description
 Downloads and installs openvpn configuration from Archne server
 as .ovpn file or creates a NetwormManager connection
 
 %prep
-%setup
+%autsetupo
 
 %build
-qmake-qt5
-make %{?_smp_mflags}
+%cmake_kf6
+%cmak_build
 
 %install
-mkdir -vp %{buildroot}/%{_bindir}
-install \
-    %{_builddir}/%{?buildsubdir}/ArachneConfigDownloader \
-    %{buildroot}/%{_bindir}/arachnecdl
+%cmake_install
 
 mkdir -pv %{buildroot}/%{desktop_dir}
 touch %{buildroot}/%{desktop_dir}/arachnecdl.desktop
