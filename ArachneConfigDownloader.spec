@@ -6,7 +6,7 @@
 Name:       ArachneConfigDownloader
 Version:    1.5
 Release:    1
-License:    GPL-3.0
+License:    GPL-3.0-or-later
 Summary:    Arachne Config Downloader
 Source:     %{name}-%{version}.tar.gz
 Url:        http://www.nieslony.at/arachne
