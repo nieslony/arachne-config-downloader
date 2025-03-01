@@ -13,7 +13,6 @@ Url:        http://www.nieslony.at/arachne
 BuildRequires:  qt%{qt_version}-qtbase-devel
 BuildRequires:  qt%{qt_version}-linguist
 BuildRequires:  make
-BuildRequires:  kf5-kio-devel
 Recommends:     gnome-shell-extension-appindicator
 
 BuildRequires:  qt%{qt_version}-qtbase-devel
@@ -28,14 +27,16 @@ Downloads and installs openvpn configuration from Archne server
 as .ovpn file or creates a NetwormManager connection
 
 %prep
-%autsetupo
+%autosetup
 
 %build
 %cmake_kf6
-%cmak_build
+%cmake_build
 
 %install
+echo "--- BEGIN autoinstall ---"
 %cmake_install
+echo "--- END autoinstall ---"
 
 mkdir -pv %{buildroot}/%{desktop_dir}
 touch %{buildroot}/%{desktop_dir}/arachnecdl.desktop
