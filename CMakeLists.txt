@@ -48,7 +48,7 @@ qt_add_resources(arachne-cdl icons
 )
 
 
-target_compile_options(arachne-cdl PUBLIC -fexceptions)
+kde_enable_exceptions()
 
 target_link_libraries(arachne-cdl
     Qt::Core
