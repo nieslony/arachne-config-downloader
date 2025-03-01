@@ -10,15 +10,15 @@ License:    GPLv3
 Summary:    Arachne Config Downloader
 Source:     %{name}-%{version}.tar.gz
 Url:        http://www.nieslony.at/arachne
-BuildRequires:  qt%{qt_verion}-qtbase-devel
-BuildRequires:  qt%{qt_verion}-linguist
+BuildRequires:  qt%{qt_version}-qtbase-devel
+BuildRequires:  qt%{qt_version}-linguist
 BuildRequires:  make
 BuildRequires:  kf5-kio-devel
 Recommends:     gnome-shell-extension-appindicator
 
-BuildRequires:  qt%{qt_verion}-qtbase-devel
-BuildRequires:  kf%{kf_versiopn}-kio-devel kf%{kf_versiopn}-kiconthemes-devel
-BuildRequires:  desktop-file-utils kf%{kf_versiopn}-rpm-macros
+BuildRequires:  qt%{qt_version}-qtbase-devel
+BuildRequires:  kf%{kf_version}-kio-devel kf%{kf_version}-kiconthemes-devel
+BuildRequires:  desktop-file-utils kf%{kf_version}-rpm-macros
 %define icons_dir   %{_datadir}/icons
 %define desktop_dir %{_datadir}/applications
 %define autostart_dir   %{_sysconfdir}/xdg/autostart
