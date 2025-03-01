@@ -6,7 +6,7 @@
 Name:       ArachneConfigDownloader
 Version:    1.5
 Release:    1
-License:    GPLv3
+License:    GPL-3.0
 Summary:    Arachne Config Downloader
 Source:     %{name}-%{version}.tar.gz
 Url:        http://www.nieslony.at/arachne
@@ -34,27 +34,25 @@ as .ovpn file or creates a NetwormManager connection
 %cmake_build
 
 %install
-echo "--- BEGIN autoinstall ---"
 %cmake_install
-echo "--- END autoinstall ---"
 
 mkdir -pv %{buildroot}/%{desktop_dir}
-touch %{buildroot}/%{desktop_dir}/arachnecdl.desktop
-desktop-file-edit --set-name=arachnecdl \
+touch %{buildroot}/%{desktop_dir}/arachne-cdl.desktop
+desktop-file-edit --set-name=arachne-cdl \
     --set-generic-name="Arachjne Config Downloader" \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
-    --set-key=Exec --set-value=arachnecdl \
-    %{buildroot}/%{desktop_dir}/arachnecdl.desktop
+    --set-key=Exec --set-value=arachne-cdl \
+    %{buildroot}/%{desktop_dir}/arachne-cdl.desktop
 
 mkdir -pv %{buildroot}/%{autostart_dir}
-touch %{buildroot}/%{autostart_dir}/arachnecdl.desktop
-desktop-file-edit --set-name=arachnecdl \
+touch %{buildroot}/%{autostart_dir}/arachne-cdl.desktop
+desktop-file-edit --set-name=arachne-cdl \
     --set-generic-name="Arachne Config Downloader" \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
-    --set-key=Exec --set-value=arachnecdl \
-    %{buildroot}/%{autostart_dir}/arachnecdl.desktop
+    --set-key=Exec --set-value=arachne-cdl \
+    %{buildroot}/%{autostart_dir}/arachne-cdl.desktop
 
 %post
 CONF_DIR="/etc/xdg/Claas Nieslony"
@@ -78,8 +76,8 @@ fi
 
 %files
 %{_bindir}/*
-%{autostart_dir}/arachnecdl.desktop
-%{desktop_dir}/arachnecdl.desktop
+%{autostart_dir}/arachne-cdl.desktop
+%{desktop_dir}/arachne-cdl.desktop
 %license LICENSE
 
 %changelog
