@@ -66,3 +66,31 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, Uint32List &l)
 
     return argument;
 }
+
+QVariant dbus_property(
+    const QString &service,
+    const QString &path,
+    const QString &interface,
+    const char* propertyName
+    )
+{
+    QDBusConnection con = QDBusConnection::systemBus();
+    if (!con.isConnected())
+        throw DBusException(QString::fromUtf8("Cannot connect to the D-Bus system bus."));
+
+    QDBusInterface iface(
+        service,
+        path,
+        interface,
+        con
+        );
+    if (!iface.isValid()) {
+        throw DBusException(
+            QString::fromUtf8("Interface not valid: %1 %2")
+                .arg(iface.lastError().name())
+                .arg(iface.lastError().message())
+            );
+    }
+
+    return iface.property(propertyName);
+}

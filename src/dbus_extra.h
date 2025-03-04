@@ -52,6 +52,13 @@ private:
     QString _msg;
 };
 
+QVariant dbus_property(
+    const QString &service,
+    const QString &path,
+    const QString &interface,
+    const char* propertyName
+    );
+
 template<typename T>
 QDBusReply<T> dbus_call(
         const QString &service,
