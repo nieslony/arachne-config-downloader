@@ -27,7 +27,11 @@ private:
     QComboBox *downloadType;
     QLineEdit *downloadDestination;
 
+    QCheckBox *allowDownloadFromVpn;
+
     void createGui();
+    QWidget* createDownloadTab();
+    QWidget* createEnabledNmConsTab();
     void loadSettings();
     void saveSettings();
 

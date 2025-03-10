@@ -26,11 +26,56 @@
 #include <QIODevice>
 #include <KIO/CopyJob>
 #include <KJobUiDelegate>
+#include <QSequentialIterable>
 
 #include <unistd.h>
 
+typedef QMap<QString, QVariant> VariantDict;
+bool ArachneConfigDownloaderApplication::isNmConnectionValid()
+{
+    try {
+        VariantDict reply = dbus_call<VariantDict>(
+            QString::fromUtf8("org.freedesktop.NetworkManager"),
+            QString::fromUtf8("/org/freedesktop/NetworkManager"),
+            QString::fromUtf8("org.freedesktop.DBus.Properties"),
+            QString::fromUtf8("GetAll"), QString::fromUtf8("org.freedesktop.NetworkManager")
+        ).value();
+
+        const QDBusArgument activeConnections = reply.value(QString::fromUtf8("ActiveConnections"))
+            .value<QDBusArgument>();
+        activeConnections.beginArray();
+        while (!activeConnections.atEnd()) {
+            QDBusObjectPath var;
+            activeConnections >> var;
+            qWarning() << var;
+
+            QString conName = dbus_property(
+                QString::fromUtf8("org.freedesktop.NetworkManager"),
+                var.path(),
+                QString::fromUtf8("org.freedesktop.NetworkManager.Connection.Active"),
+                "Id"
+                ).toString();
+            QString conType = dbus_property(
+                                  QString::fromUtf8("org.freedesktop.NetworkManager"),
+                                  var.path(),
+                                  QString::fromUtf8("org.freedesktop.NetworkManager.Connection.Active"),
+                                  "Type"
+                                  ).toString();
+            qWarning() << conName << conType;
+        }
+        activeConnections.endArray();
+    }
+    catch (DBusException ex) {
+        qWarning() << ex.msg();
+    }
+
+    return false;
+}
+
 void ArachneConfigDownloaderApplication::onDownloadNow()
 {
+    if (!isNmConnectionValid())
+        return;
     Settings &settings = Settings::getInstance();
 
     QString url = settings.adminServerUrl()

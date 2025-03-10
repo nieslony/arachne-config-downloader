@@ -43,6 +43,7 @@ private:
     void setStatusIcon(DownloadStatus);
     void updateLastDownload(const QDateTime&when = QDateTime::currentDateTimeUtc());
 #ifdef Q_OS_LINUX
+    bool isNmConnectionValid();
     void addNetworkManagerConnection(const QByteArray&json);
     void updateNetworkManagerConnection(
             const QString &conUuid,

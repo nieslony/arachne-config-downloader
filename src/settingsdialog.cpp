@@ -26,6 +26,35 @@ SettingsDialog::SettingsDialog()
 
 void SettingsDialog::createGui()
 {
+    QTabWidget *tabs = new QTabWidget();
+    tabs->addTab(createDownloadTab(), QString::fromUtf8("Download"));
+    tabs->addTab(createEnabledNmConsTab(), QString::fromUtf8("Enabled NetworkManager Connections"));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(tabs);
+    layout->addWidget(buttonBox);
+    setLayout(layout);
+}
+
+QWidget* SettingsDialog::createEnabledNmConsTab()
+{
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    allowDownloadFromVpn = new QCheckBox(QString::fromUtf8("Allow Download from VPN"));
+    layout->addWidget(allowDownloadFromVpn);
+
+    QWidget *widget = new QWidget();
+    widget->setLayout(layout);
+
+    return widget;
+}
+
+QWidget* SettingsDialog::createDownloadTab()
+{
     QGridLayout *grid = new QGridLayout();
     QLabel *label;
     int row = 0;
@@ -93,14 +122,9 @@ void SettingsDialog::createGui()
     grid->addWidget(label, row, 0);
     grid->addWidget(downloadDestination, row, 1);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    QVBoxLayout *layout = new QVBoxLayout();
-    setLayout(layout);
-    layout->addLayout(grid);
-    layout->addWidget(buttonBox);
+    QWidget *widget = new QWidget();
+    widget->setLayout(grid);
+    return widget;
 }
 
 void SettingsDialog::loadSettings()
