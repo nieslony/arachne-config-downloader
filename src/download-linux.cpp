@@ -37,10 +37,23 @@ struct NmConfiguration {
     QString conUuid;
 };
 
-bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings&)
+bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings& settings)
 {
     QList<NmConnection> activeCons = NmConnection::activeNmConnections();
-    QList<NmConnection> allCons = NmConnection::allNmConnections();
+    QList<NmConnection> allowedCons = settings.allowedNmConnections();
+
+    for (auto &actCon: activeCons) {
+        if (settings.allowDownloadAllWifi() && actCon.type() == NmConnection::TypeWireless)
+            return true;
+        if (settings.allowDownloadAllWired() && actCon.type() == NmConnection::TypeWired)
+            return true;
+        if (settings.allowDownloadFromVpn() && actCon.uuid() == settings.connectionUuid())
+            return true;
+        for (auto &allowed: allowedCons) {
+            if (actCon.uuid() == allowed.uuid())
+                return true;
+        }
+    }
 
     return false;
 }
@@ -48,8 +61,10 @@ bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings&)
 void ArachneConfigDownloaderApplication::onDownloadNow()
 {
     Settings &settings = Settings::getInstance();
-    if (!isNmConnectionValid(settings))
+    if (!isNmConnectionValid(settings)) {
+        qWarning() << "No valid NM connection active. Skipping download.";
         return;
+    }
 
     QString url = settings.adminServerUrl()
             + ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
