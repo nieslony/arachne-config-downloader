@@ -102,8 +102,6 @@ QList<NmConnection> allNmConnections()
                 QString::fromUtf8("GetSettings")
             );
 
-            //qWarning() << reply.value();
-            //qWarning() << reply.value().value(QString::fromUtf8("connection"));
             VariantDict props = reply.value()
                                     .value(QString::fromUtf8("connection"));
             NmConnection con(props);

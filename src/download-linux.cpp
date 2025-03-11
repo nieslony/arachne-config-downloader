@@ -40,10 +40,7 @@ struct NmConfiguration {
 bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings& settings)
 {
     QList<NmConnection> activeCons = activeNmConnections();
-    qWarning() << activeCons;
-
     QList<NmConnection> allCons = allNmConnections();
-    qWarning() << allCons;
 
     return false;
 }
