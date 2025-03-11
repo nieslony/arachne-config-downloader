@@ -3,8 +3,6 @@
 
 #include <QDialog>
 
-#include "settings.h"
-
 class QLineEdit;
 class QSpinBox;
 class QCheckBox;
@@ -28,10 +26,12 @@ private:
     QLineEdit *downloadDestination;
 
     QCheckBox *allowDownloadFromVpn;
+    QCheckBox *allowAllWifi;
+    QCheckBox *allowAllWired;
 
     void createGui();
     QWidget* createDownloadTab();
-    QWidget* createEnabledNmConsTab();
+    QWidget* createAllowedNmConsTab();
     void loadSettings();
     void saveSettings();
 

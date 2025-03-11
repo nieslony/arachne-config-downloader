@@ -32,10 +32,12 @@ add_executable(arachne-cdl
     src/settingsdialog.cpp
     src/dbus_extra.cpp
     src/download-linux.cpp
+    src/nmconnection.cpp
     src/arachneconfigdownloaderapplication.h
     src/dbus_extra.h
     src/settingsdialog.h
     src/settings.h
+    src/nmconnection.h
 )
 
 qt_add_resources(arachne-cdl icons

@@ -12,6 +12,7 @@ class QMenu;
 #ifdef Q_OS_LINUX
 class KJob;
 class QDBusArgument;
+class Settings;
 
 namespace KIO {
 class Job;
@@ -43,7 +44,7 @@ private:
     void setStatusIcon(DownloadStatus);
     void updateLastDownload(const QDateTime&when = QDateTime::currentDateTimeUtc());
 #ifdef Q_OS_LINUX
-    bool isNmConnectionValid();
+    bool isNmConnectionValid(const Settings&);
     void addNetworkManagerConnection(const QByteArray&json);
     void updateNetworkManagerConnection(
             const QString &conUuid,

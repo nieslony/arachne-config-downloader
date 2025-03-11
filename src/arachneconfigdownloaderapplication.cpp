@@ -6,6 +6,7 @@
 
 #include "arachneconfigdownloaderapplication.h"
 #include "settingsdialog.h"
+#include "settings.h"
 
 const QString ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH
     = QString::fromUtf8("/api/openvpn/user_config");

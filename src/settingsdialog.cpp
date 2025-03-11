@@ -1,5 +1,7 @@
 #include "settingsdialog.h"
 #include "arachneconfigdownloaderapplication.h"
+#include "settings.h"
+#include "nmconnection.h"
 
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -10,7 +12,11 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QTimer>
+#include <QGroupBox>
 #include <QDebug>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QPushButton>
 
 SettingsDialog::SettingsDialog()
 {
@@ -28,7 +34,7 @@ void SettingsDialog::createGui()
 {
     QTabWidget *tabs = new QTabWidget();
     tabs->addTab(createDownloadTab(), QString::fromUtf8("Download"));
-    tabs->addTab(createEnabledNmConsTab(), QString::fromUtf8("Enabled NetworkManager Connections"));
+    tabs->addTab(createAllowedNmConsTab(), QString::fromUtf8("Allowed NetworkManager Connections"));
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -40,12 +46,103 @@ void SettingsDialog::createGui()
     setLayout(layout);
 }
 
-QWidget* SettingsDialog::createEnabledNmConsTab()
+QWidget* SettingsDialog::createAllowedNmConsTab()
 {
     QVBoxLayout *layout = new QVBoxLayout();
 
-    allowDownloadFromVpn = new QCheckBox(QString::fromUtf8("Allow Download from VPN"));
+    allowDownloadFromVpn = new QCheckBox(QString::fromUtf8("Allow Download from configured VPN"));
     layout->addWidget(allowDownloadFromVpn);
+
+    allowAllWifi = new QCheckBox(QString::fromUtf8("Allow all Wifi Connections"));
+    layout->addWidget(allowAllWifi);
+
+    allowAllWired = new QCheckBox(QString::fromUtf8("Allow all wired Connections"));
+    layout->addWidget(allowAllWired);
+
+    QGridLayout *conLayout = new QGridLayout();
+    QVBoxLayout *vbox;
+
+    QListWidget *allConnections = new QListWidget();
+    for (auto &con: allNmConnections()) {
+        if (
+            con.type() != NmConnection::TypeBridge &&
+            con.type() != NmConnection::TypeLoopback &&
+            con.type() != NmConnection::TypeTun
+            )
+            allConnections->addItem(con.toListWidgetItem());
+    }
+    allConnections->setSortingEnabled(true);
+    conLayout->addWidget(new QLabel(QString::fromUtf8("Available Connections:")), 0, 0);
+    conLayout->addWidget(allConnections, 1, 0);
+
+    QPushButton *add = new QPushButton(QString::fromUtf8("Add"));
+    add->setEnabled(false);
+    QPushButton *addAll = new QPushButton(QString::fromUtf8("Add All"));
+    QPushButton *removeAll = new QPushButton(QString::fromUtf8("Remove All"));
+    QPushButton *remove = new QPushButton(QString::fromUtf8("Remove"));
+    remove->setEnabled(false);
+    vbox = new QVBoxLayout();
+    vbox->addWidget(add);
+    vbox->addWidget(addAll);
+    vbox->addWidget(removeAll);
+    vbox->addWidget(remove);
+    conLayout->addLayout(vbox, 1, 1);
+
+    QListWidget *allowedConnections = new QListWidget();
+    allowedConnections->setSortingEnabled(true);
+    conLayout->addWidget(new QLabel(QString::fromUtf8("Allowed Connections:")), 0, 2);
+    conLayout->addWidget(allowedConnections, 1, 2);
+
+    connect(
+        allConnections, &QListWidget::itemSelectionChanged, this,
+        [allConnections, add]() {
+            add->setEnabled(!allConnections->selectedItems().empty());
+    });
+    connect(
+        allowedConnections, &QListWidget::itemSelectionChanged, this,
+        [allConnections, remove]() {
+            remove->setEnabled(!allConnections->selectedItems().empty());
+    });
+    connect(
+        add, &QPushButton::clicked, this,
+        [allConnections, allowedConnections](bool) {
+            auto selection = allConnections->currentItem();
+            auto data = selection->data(Qt::UserRole);
+            NmConnection con = qvariant_cast<NmConnection>(data);
+            allowedConnections->addItem(con.toListWidgetItem());
+            delete allConnections->takeItem(allConnections->currentRow());
+    });
+    connect(
+        remove, &QPushButton::clicked, this,
+        [allConnections, allowedConnections](bool) {
+            auto selection = allowedConnections->currentItem();
+            auto data = selection->data(Qt::UserRole);
+            NmConnection con = qvariant_cast<NmConnection>(data);
+            allConnections->addItem(con.toListWidgetItem());
+            delete allowedConnections->takeItem(allowedConnections->currentRow());
+    });
+    connect(
+        addAll, &QPushButton::clicked, this,
+        [allConnections, allowedConnections](bool) {
+            for (int i = allConnections->count()-1; i >= 0; i--) {
+                auto data = allConnections->item(i)->data(Qt::UserRole);
+                NmConnection con = qvariant_cast<NmConnection>(data);
+                allowedConnections->addItem(con.toListWidgetItem());
+            }
+            allConnections->clear();
+    });
+    connect(
+        removeAll, &QPushButton::clicked, this,
+        [allConnections, allowedConnections](bool) {
+            for (int i = allowedConnections->count()-1; i >= 0; i--) {
+                auto data = allowedConnections->item(i)->data(Qt::UserRole);
+                NmConnection con = qvariant_cast<NmConnection>(data);
+                allConnections->addItem(con.toListWidgetItem());
+            }
+            allowedConnections->clear();
+        });
+
+    layout->addLayout(conLayout);
 
     QWidget *widget = new QWidget();
     widget->setLayout(layout);
@@ -146,7 +243,11 @@ void SettingsDialog::loadSettings()
     downloadType->setCurrentIndex(
                 downloadType->findData(settings.downloadType())
                 );
-   downloadDestination->setText(settings.downloadDestination());
+    downloadDestination->setText(settings.downloadDestination());
+
+    allowDownloadFromVpn->setChecked(settings.allowDownloadFromVpn());
+    allowAllWifi->setChecked(settings.allowDownloadAllWifi());
+    allowAllWired->setChecked(settings.allowDownloadAllWired());
 
    onToggleAutoDownload(settings.autoDownload());
    onChangeDownloadType(settings.downloadType());
@@ -191,6 +292,10 @@ void SettingsDialog::saveSettings()
         if (!timer.isActive())
             timer.start();
     }
+
+    settings.setAllowDownloadFromVpn(allowDownloadFromVpn->checkState());
+    settings.setAllowDownloadAllWifi(allowAllWifi->checkState());
+    settings.setAllowDownloadAllWired(allowAllWired->checkState());
 
     settings.sync();
 }

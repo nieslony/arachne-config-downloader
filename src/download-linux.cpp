@@ -1,6 +1,7 @@
 #include "arachneconfigdownloaderapplication.h"
 #include "settings.h"
 #include "dbus_extra.h"
+#include "nmconnection.h"
 
 #include <QTemporaryFile>
 #include <QFileInfo>
@@ -30,53 +31,28 @@
 
 #include <unistd.h>
 
-typedef QMap<QString, QVariant> VariantDict;
-bool ArachneConfigDownloaderApplication::isNmConnectionValid()
+struct NmConfiguration {
+    QString conName;
+    QString conType;
+    QString conUuid;
+};
+
+bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings& settings)
 {
-    try {
-        VariantDict reply = dbus_call<VariantDict>(
-            QString::fromUtf8("org.freedesktop.NetworkManager"),
-            QString::fromUtf8("/org/freedesktop/NetworkManager"),
-            QString::fromUtf8("org.freedesktop.DBus.Properties"),
-            QString::fromUtf8("GetAll"), QString::fromUtf8("org.freedesktop.NetworkManager")
-        ).value();
+    QList<NmConnection> activeCons = activeNmConnections();
+    qWarning() << activeCons;
 
-        const QDBusArgument activeConnections = reply.value(QString::fromUtf8("ActiveConnections"))
-            .value<QDBusArgument>();
-        activeConnections.beginArray();
-        while (!activeConnections.atEnd()) {
-            QDBusObjectPath var;
-            activeConnections >> var;
-            qWarning() << var;
-
-            QString conName = dbus_property(
-                QString::fromUtf8("org.freedesktop.NetworkManager"),
-                var.path(),
-                QString::fromUtf8("org.freedesktop.NetworkManager.Connection.Active"),
-                "Id"
-                ).toString();
-            QString conType = dbus_property(
-                                  QString::fromUtf8("org.freedesktop.NetworkManager"),
-                                  var.path(),
-                                  QString::fromUtf8("org.freedesktop.NetworkManager.Connection.Active"),
-                                  "Type"
-                                  ).toString();
-            qWarning() << conName << conType;
-        }
-        activeConnections.endArray();
-    }
-    catch (DBusException ex) {
-        qWarning() << ex.msg();
-    }
+    QList<NmConnection> allCons = allNmConnections();
+    qWarning() << allCons;
 
     return false;
 }
 
 void ArachneConfigDownloaderApplication::onDownloadNow()
 {
-    if (!isNmConnectionValid())
-        return;
     Settings &settings = Settings::getInstance();
+    if (!isNmConnectionValid(settings))
+        return;
 
     QString url = settings.adminServerUrl()
             + ArachneConfigDownloaderApplication::USER_CONFIG_API_PATH

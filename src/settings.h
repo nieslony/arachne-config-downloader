@@ -24,20 +24,23 @@ public:
         return settings;
     }
 
-    QString adminServerUrl();
-    bool ignoreSslErrors();
-    bool autoDownload();
-    TimeUnit downloadIntervalUnit();
-    int downloadInterval();
-    TimeUnit downloadDelayUnit();
-    int downloadDelay();
-    DownloadType downloadType();
-    QString downloadDestination();
-    int downloadDeleayMsec();
-    int downloadIntervalMsec();
+    QString adminServerUrl() const;
+    bool ignoreSslErrors() const;
+    bool autoDownload() const;
+    TimeUnit downloadIntervalUnit() const;
+    int downloadInterval() const;
+    TimeUnit downloadDelayUnit() const;
+    int downloadDelay() const;
+    DownloadType downloadType() const;
+    QString downloadDestination() const;
+    int downloadDeleayMsec() const;
+    int downloadIntervalMsec() const;
 #ifdef Q_OS_LINUX
-    QString connectionUuid();
-    QString certsFolder();
+    QString connectionUuid() const;
+    QString certsFolder() const;
+    bool allowDownloadFromVpn() const;
+    bool allowDownloadAllWifi() const;
+    bool allowDownloadAllWired() const;
 #endif
     QDateTime lastSuccessfulDownload();
 
@@ -52,6 +55,9 @@ public:
     void setDownloadDestination(const QString&);
 #ifdef Q_OS_LINUX
     void setConnectionUuid(const QString&);
+    void setAllowDownloadFromVpn(bool);
+    void setAllowDownloadAllWifi(bool);
+    void setAllowDownloadAllWired(bool);
 #endif
     void touchSuccessfulDownload();
 
@@ -73,10 +79,13 @@ private:
     static const QString SN_DOWNLOAD_DESTINATION;
 #ifdef Q_OS_LINUX
     static const QString SN_CONNECTION_UUID;
+    static const QString SN_ALLOW_DOWNLOAD_FROM_VPN;
+    static const QString SN_ALLOW_DOWNLOAD_ALL_WIFI;
+    static const QString SN_ALLOW_DOWNLOAD_ALL_WIRED;
 #endif
     static const QString SN_LAST_SUCCESSFUL_DOWNLOAD;
 
-    int buildTime(int timeSpan, TimeUnit unit);
+    static int buildTime(int timeSpan, TimeUnit unit);
 };
 
 #endif // SETTINGS_H

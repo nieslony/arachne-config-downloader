@@ -15,6 +15,9 @@ const QString Settings::SN_DOWNLOAD_TYPE(QString::fromUtf8("downloadType"));
 const QString Settings::SN_DOWNLOAD_DESTINATION(QString::fromUtf8("downloadDestination"));
 #ifdef Q_OS_LINUX
 const QString Settings::SN_CONNECTION_UUID(QString::fromUtf8("connectionUuid"));
+const QString Settings::SN_ALLOW_DOWNLOAD_FROM_VPN(QString::fromUtf8("allowDownloadFromVpn"));
+const QString Settings::SN_ALLOW_DOWNLOAD_ALL_WIFI(QString::fromUtf8("allowDownloadAllWifi"));
+const QString Settings::SN_ALLOW_DOWNLOAD_ALL_WIRED(QString::fromUtf8("allowDownloadAllWired"));
 #endif
 const QString Settings::SN_LAST_SUCCESSFUL_DOWNLOAD(QString::fromUtf8("lastSuccesfulDownload"));
 
@@ -23,60 +26,60 @@ Settings::Settings()
     settings.setAtomicSyncRequired(false);
 }
 
-QString Settings::adminServerUrl()
+QString Settings::adminServerUrl() const
 {
     static const QString defaultUrl(QString::fromUtf8("http://arachne.%1/arachne").arg(QHostInfo::localDomainName()));
     return settings.value(SN_ADMIN_SERVER_URL, defaultUrl).toString();
 }
 
-bool Settings::ignoreSslErrors()
+bool Settings::ignoreSslErrors() const
 {
     return settings.value(SN_IGNORE_SSL_ERRORS, false).toBool();
 }
 
-bool Settings::autoDownload()
+bool Settings::autoDownload() const
 {
     return settings.value(SN_AUTO_DOWNLOAD, true).toBool();
 }
 
-Settings::TimeUnit Settings::downloadIntervalUnit()
+Settings::TimeUnit Settings::downloadIntervalUnit() const
 {
     return static_cast<TimeUnit>(settings.value(SN_DOWNLOAD_INTERVAL_UNIT, MIN).toInt());
 }
 
-int Settings::downloadInterval()
+int Settings::downloadInterval() const
 {
     return settings.value(SN_DOWNLOAD_INTERVAL, 60).toInt();
 }
 
-Settings::TimeUnit Settings::downloadDelayUnit()
+Settings::TimeUnit Settings::downloadDelayUnit() const
 {
     return static_cast<TimeUnit>(settings.value(SN_DOWNLOAD_DELAY_UNIT, MIN).toInt());
 }
 
-int Settings::downloadDelay()
+int Settings::downloadDelay() const
 {
     return settings.value(SN_DOWNLOAD_DELAY, 5).toInt();
 }
 
-Settings::DownloadType Settings::downloadType()
+Settings::DownloadType Settings::downloadType() const
 {
     return static_cast<DownloadType>(settings.value(SN_DOWNLOAD_TYPE, NETWORK_MANAGER).toInt());
 }
 
-QString Settings::downloadDestination()
+QString Settings::downloadDestination() const
 {
     static const QString defaultDestination(QString::fromUtf8("~/.openvpn"));
     return settings.value(SN_DOWNLOAD_DESTINATION, defaultDestination).toString();
 }
 
 #ifdef Q_OS_LINUX
-QString Settings::certsFolder()
+QString Settings::certsFolder() const
 {
     return QDir::homePath() + QString::fromUtf8("/.cert");
 }
 
-QString Settings::connectionUuid()
+QString Settings::connectionUuid() const
 {
     return settings.value(SN_CONNECTION_UUID).toString();
 }
@@ -132,14 +135,45 @@ void Settings::setConnectionUuid(const QString &path)
 {
     settings.setValue(SN_CONNECTION_UUID, path);
 }
+
+void Settings::setAllowDownloadFromVpn(bool e)
+{
+    settings.setValue(SN_ALLOW_DOWNLOAD_FROM_VPN, e);
+}
+
+void Settings::setAllowDownloadAllWifi(bool e)
+{
+    settings.setValue(SN_ALLOW_DOWNLOAD_ALL_WIFI, e);
+}
+
+void Settings::setAllowDownloadAllWired(bool e)
+{
+    settings.setValue(SN_ALLOW_DOWNLOAD_ALL_WIRED, e);
+}
+
+bool Settings::allowDownloadFromVpn() const
+{
+    return settings.value(SN_ALLOW_DOWNLOAD_FROM_VPN, true).toBool();
+}
+
+bool Settings::allowDownloadAllWifi() const
+{
+    return settings.value(SN_ALLOW_DOWNLOAD_ALL_WIFI, true).toBool();
+}
+
+bool Settings::allowDownloadAllWired() const
+{
+    return settings.value(SN_ALLOW_DOWNLOAD_ALL_WIRED, true).toBool();
+}
+
 #endif
 
-int Settings::downloadDeleayMsec()
+int Settings::downloadDeleayMsec() const
 {
     return buildTime(downloadDelay(), downloadDelayUnit());
 }
 
-int Settings::downloadIntervalMsec()
+int Settings::downloadIntervalMsec() const
 {
     return buildTime(downloadInterval(), downloadIntervalUnit());
 }

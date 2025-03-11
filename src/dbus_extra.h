@@ -23,7 +23,6 @@ QDebug operator<<(QDebug dbg, const Uint32List&);
 Q_DECLARE_METATYPE(StringMap)
 Q_DECLARE_METATYPE(Uint32List)
 
-
 class NMException {
 public:
     NMException(const QString &_msg) {
@@ -52,7 +51,7 @@ private:
     QString _msg;
 };
 
-QVariant dbus_property(
+extern QVariant dbus_property(
     const QString &service,
     const QString &path,
     const QString &interface,
@@ -72,19 +71,29 @@ QDBusReply<T> dbus_call(
         throw DBusException(QString::fromUtf8("Cannot connect to the D-Bus system bus."));
 
     QDBusInterface iface(
-            service,
-            path,
-            interface,
-            con
-            );
+        service,
+        path,
+        interface,
+        con
+        );
     if (!iface.isValid()) {
         throw DBusException(
-                    QString::fromUtf8("Interface not valid: %1 %2")
-                    .arg(iface.lastError().name())
-                    .arg(iface.lastError().message())
-                    );
+            QString::fromUtf8("Interface not valid: %1 %2")
+                .arg(iface.lastError().name())
+                .arg(iface.lastError().message())
+            );
     }
 
+    return dbus_call<T>(path, iface, method, arg);
+}
+
+template<typename T>
+QDBusReply<T> dbus_call(
+    const QString &path,
+    QDBusInterface &iface,
+    const QString &method,
+    QVariant arg=QVariant())
+{
     QDBusReply<T> reply;
     if (arg.isValid())
         reply = iface.call(method, arg);
