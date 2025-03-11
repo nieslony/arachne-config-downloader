@@ -7,6 +7,9 @@ class QLineEdit;
 class QSpinBox;
 class QCheckBox;
 class QComboBox;
+class QListWidget;
+
+#include "nmconnection.h"
 
 class SettingsDialog : public QDialog
 {
@@ -29,11 +32,18 @@ private:
     QCheckBox *allowAllWifi;
     QCheckBox *allowAllWired;
 
+    QListWidget *allConnectionsList;
+    QListWidget *allowedConnectionsList;
+
     void createGui();
     QWidget* createDownloadTab();
     QWidget* createAllowedNmConsTab();
     void loadSettings();
     void saveSettings();
+
+#ifdef Q_OS_LINUX
+    static NmConnection nmConnectionFromItem(const QListWidgetItem*);
+#endif
 
 private Q_SLOTS:
     void onToggleAutoDownload(bool);

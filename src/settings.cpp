@@ -18,6 +18,7 @@ const QString Settings::SN_CONNECTION_UUID(QString::fromUtf8("connectionUuid"));
 const QString Settings::SN_ALLOW_DOWNLOAD_FROM_VPN(QString::fromUtf8("allowDownloadFromVpn"));
 const QString Settings::SN_ALLOW_DOWNLOAD_ALL_WIFI(QString::fromUtf8("allowDownloadAllWifi"));
 const QString Settings::SN_ALLOW_DOWNLOAD_ALL_WIRED(QString::fromUtf8("allowDownloadAllWired"));
+const QString Settings::SN_ALLOW_DOWNLOAD_NM_CONS(QString::fromUtf8("allowedNmConnections"));
 #endif
 const QString Settings::SN_LAST_SUCCESSFUL_DOWNLOAD(QString::fromUtf8("lastSuccesfulDownload"));
 
@@ -151,6 +152,14 @@ void Settings::setAllowDownloadAllWired(bool e)
     settings.setValue(SN_ALLOW_DOWNLOAD_ALL_WIRED, e);
 }
 
+void Settings::setAllowedNmConnections(const QList<NmConnection>& cons)
+{
+    QList<QString> conUuids;
+    for (auto &c: cons)
+        conUuids.append(c.uuid());
+    settings.setValue(SN_ALLOW_DOWNLOAD_NM_CONS, conUuids);
+}
+
 bool Settings::allowDownloadFromVpn() const
 {
     return settings.value(SN_ALLOW_DOWNLOAD_FROM_VPN, true).toBool();
@@ -166,6 +175,38 @@ bool Settings::allowDownloadAllWired() const
     return settings.value(SN_ALLOW_DOWNLOAD_ALL_WIRED, true).toBool();
 }
 
+QList<NmConnection> Settings::allowedNmConnections() const
+{
+    QList<NmConnection> connections;
+    if (settings.contains(SN_ALLOW_DOWNLOAD_NM_CONS)) {
+        QList<QString> allowedConUUids = settings.value(SN_ALLOW_DOWNLOAD_NM_CONS).value<QStringList>();
+        QRegularExpression re(
+            QString::fromUtf8("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"),
+            QRegularExpression::CaseInsensitiveOption
+            );
+        QList<NmConnection> allConnections = NmConnection::allNmConnections();
+        for (auto &conUuid: allowedConUUids) {
+            if (re.match(conUuid).hasMatch()) {
+                for (auto &con: allConnections) {
+                    if (conUuid == con.uuid()) {
+                        connections.append(con);
+                        break;
+                    }
+                }
+            }
+            else {
+                for (auto &con: allConnections) {
+                    if (conUuid == con.name()) {
+                        connections.append(con);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return connections;
+}
 #endif
 
 int Settings::downloadDeleayMsec() const

@@ -37,10 +37,10 @@ struct NmConfiguration {
     QString conUuid;
 };
 
-bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings& settings)
+bool ArachneConfigDownloaderApplication::isNmConnectionValid(const Settings&)
 {
-    QList<NmConnection> activeCons = activeNmConnections();
-    QList<NmConnection> allCons = allNmConnections();
+    QList<NmConnection> activeCons = NmConnection::activeNmConnections();
+    QList<NmConnection> allCons = NmConnection::allNmConnections();
 
     return false;
 }

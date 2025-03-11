@@ -34,6 +34,9 @@ public:
 
     QListWidgetItem *toListWidgetItem() const;
 
+    static QList<NmConnection> allNmConnections();
+    static QList<NmConnection> activeNmConnections();
+
 private:
     QString _name;
     QString _type;
@@ -45,8 +48,5 @@ private:
 Q_DECLARE_METATYPE(NmConnection);
 
 extern QDebug& operator<<(QDebug& os, const NmConnection& dt);
-
-extern QList<NmConnection> allNmConnections();
-extern QList<NmConnection> activeNmConnections();
 
 #endif // NMCONNECTION_H

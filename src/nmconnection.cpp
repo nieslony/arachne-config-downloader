@@ -57,7 +57,7 @@ QDebug& operator<<(QDebug& os, const NmConnection& nmc)
     return os;
 }
 
-QList<NmConnection> allNmConnections()
+QList<NmConnection> NmConnection::allNmConnections()
 {
     QList<NmConnection> connections;
 
@@ -116,7 +116,7 @@ QList<NmConnection> allNmConnections()
     return connections;
 }
 
-QList<NmConnection> activeNmConnections()
+QList<NmConnection> NmConnection::activeNmConnections()
 {
     QList<NmConnection> connections;
 

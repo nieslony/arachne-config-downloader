@@ -5,6 +5,8 @@
 #include <QString>
 #include <QDateTime>
 
+#include "nmconnection.h"
+
 class Settings
 {
 public:
@@ -41,6 +43,7 @@ public:
     bool allowDownloadFromVpn() const;
     bool allowDownloadAllWifi() const;
     bool allowDownloadAllWired() const;
+    QList<NmConnection> allowedNmConnections() const;
 #endif
     QDateTime lastSuccessfulDownload();
 
@@ -58,6 +61,7 @@ public:
     void setAllowDownloadFromVpn(bool);
     void setAllowDownloadAllWifi(bool);
     void setAllowDownloadAllWired(bool);
+    void setAllowedNmConnections(const QList<NmConnection>&);
 #endif
     void touchSuccessfulDownload();
 
@@ -82,6 +86,7 @@ private:
     static const QString SN_ALLOW_DOWNLOAD_FROM_VPN;
     static const QString SN_ALLOW_DOWNLOAD_ALL_WIFI;
     static const QString SN_ALLOW_DOWNLOAD_ALL_WIRED;
+    static const QString SN_ALLOW_DOWNLOAD_NM_CONS;
 #endif
     static const QString SN_LAST_SUCCESSFUL_DOWNLOAD;
 

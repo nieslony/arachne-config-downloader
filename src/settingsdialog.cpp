@@ -62,18 +62,18 @@ QWidget* SettingsDialog::createAllowedNmConsTab()
     QGridLayout *conLayout = new QGridLayout();
     QVBoxLayout *vbox;
 
-    QListWidget *allConnections = new QListWidget();
-    for (auto &con: allNmConnections()) {
+    allConnectionsList = new QListWidget();
+    for (auto &con: NmConnection::allNmConnections()) {
         if (
             con.type() != NmConnection::TypeBridge &&
             con.type() != NmConnection::TypeLoopback &&
             con.type() != NmConnection::TypeTun
             )
-            allConnections->addItem(con.toListWidgetItem());
+            allConnectionsList->addItem(con.toListWidgetItem());
     }
-    allConnections->setSortingEnabled(true);
+    allConnectionsList->setSortingEnabled(true);
     conLayout->addWidget(new QLabel(QString::fromUtf8("Available Connections:")), 0, 0);
-    conLayout->addWidget(allConnections, 1, 0);
+    conLayout->addWidget(allConnectionsList, 1, 0);
 
     QPushButton *add = new QPushButton(QString::fromUtf8("Add"));
     add->setEnabled(false);
@@ -88,58 +88,54 @@ QWidget* SettingsDialog::createAllowedNmConsTab()
     vbox->addWidget(remove);
     conLayout->addLayout(vbox, 1, 1);
 
-    QListWidget *allowedConnections = new QListWidget();
-    allowedConnections->setSortingEnabled(true);
+    allowedConnectionsList = new QListWidget();
+    allowedConnectionsList->setSortingEnabled(true);
     conLayout->addWidget(new QLabel(QString::fromUtf8("Allowed Connections:")), 0, 2);
-    conLayout->addWidget(allowedConnections, 1, 2);
+    conLayout->addWidget(allowedConnectionsList, 1, 2);
 
     connect(
-        allConnections, &QListWidget::itemSelectionChanged, this,
-        [allConnections, add]() {
-            add->setEnabled(!allConnections->selectedItems().empty());
+        allConnectionsList, &QListWidget::itemSelectionChanged, this,
+        [this, add]() {
+            add->setEnabled(!allConnectionsList->selectedItems().empty());
     });
     connect(
-        allowedConnections, &QListWidget::itemSelectionChanged, this,
-        [allConnections, remove]() {
-            remove->setEnabled(!allConnections->selectedItems().empty());
+        allowedConnectionsList, &QListWidget::itemSelectionChanged, this,
+        [this, remove]() {
+            remove->setEnabled(!allowedConnectionsList->selectedItems().empty());
     });
     connect(
         add, &QPushButton::clicked, this,
-        [allConnections, allowedConnections](bool) {
-            auto selection = allConnections->currentItem();
-            auto data = selection->data(Qt::UserRole);
-            NmConnection con = qvariant_cast<NmConnection>(data);
-            allowedConnections->addItem(con.toListWidgetItem());
-            delete allConnections->takeItem(allConnections->currentRow());
+        [this](bool) {
+            auto selection = allConnectionsList->currentItem();
+            NmConnection con  = nmConnectionFromItem(selection);
+            allowedConnectionsList->addItem(con.toListWidgetItem());
+            delete allConnectionsList->takeItem(allConnectionsList->currentRow());
     });
     connect(
         remove, &QPushButton::clicked, this,
-        [allConnections, allowedConnections](bool) {
-            auto selection = allowedConnections->currentItem();
-            auto data = selection->data(Qt::UserRole);
-            NmConnection con = qvariant_cast<NmConnection>(data);
-            allConnections->addItem(con.toListWidgetItem());
-            delete allowedConnections->takeItem(allowedConnections->currentRow());
+        [this](bool) {
+            auto selection = allowedConnectionsList->currentItem();
+            NmConnection con  = nmConnectionFromItem(selection);
+            allConnectionsList->addItem(con.toListWidgetItem());
+            delete allowedConnectionsList->takeItem(allowedConnectionsList->currentRow());
     });
     connect(
         addAll, &QPushButton::clicked, this,
-        [allConnections, allowedConnections](bool) {
-            for (int i = allConnections->count()-1; i >= 0; i--) {
-                auto data = allConnections->item(i)->data(Qt::UserRole);
-                NmConnection con = qvariant_cast<NmConnection>(data);
-                allowedConnections->addItem(con.toListWidgetItem());
+        [this](bool) {
+            for (int i = allConnectionsList->count()-1; i >= 0; i--) {
+                NmConnection con = nmConnectionFromItem(allConnectionsList->item(i));
+                allowedConnectionsList->addItem(con.toListWidgetItem());
             }
-            allConnections->clear();
+            allConnectionsList->clear();
     });
     connect(
         removeAll, &QPushButton::clicked, this,
-        [allConnections, allowedConnections](bool) {
-            for (int i = allowedConnections->count()-1; i >= 0; i--) {
-                auto data = allowedConnections->item(i)->data(Qt::UserRole);
-                NmConnection con = qvariant_cast<NmConnection>(data);
-                allConnections->addItem(con.toListWidgetItem());
+        [this](bool) {
+            for (int i = allowedConnectionsList->count()-1; i >= 0; i--) {
+                NmConnection con = nmConnectionFromItem(allowedConnectionsList->item(i));
+                allConnectionsList->addItem(con.toListWidgetItem());
             }
-            allowedConnections->clear();
+            allowedConnectionsList->clear();
         });
 
     layout->addLayout(conLayout);
@@ -221,6 +217,7 @@ QWidget* SettingsDialog::createDownloadTab()
 
     QWidget *widget = new QWidget();
     widget->setLayout(grid);
+
     return widget;
 }
 
@@ -249,8 +246,18 @@ void SettingsDialog::loadSettings()
     allowAllWifi->setChecked(settings.allowDownloadAllWifi());
     allowAllWired->setChecked(settings.allowDownloadAllWired());
 
-   onToggleAutoDownload(settings.autoDownload());
-   onChangeDownloadType(settings.downloadType());
+    QList<NmConnection> allowedConnections = settings.allowedNmConnections();
+    for (auto &alcon: allowedConnections) {
+        allowedConnectionsList->addItem(alcon.toListWidgetItem());
+        for (int i = allConnectionsList->count()-1; i >= 0; i--) {
+            NmConnection con = nmConnectionFromItem(allConnectionsList->item(i));
+            if (con.uuid() == alcon.uuid())
+                delete allConnectionsList->takeItem(i);
+        }
+    }
+
+    onToggleAutoDownload(settings.autoDownload());
+    onChangeDownloadType(settings.downloadType());
 }
 
 void SettingsDialog::saveSettings()
@@ -297,6 +304,14 @@ void SettingsDialog::saveSettings()
     settings.setAllowDownloadAllWifi(allowAllWifi->checkState());
     settings.setAllowDownloadAllWired(allowAllWired->checkState());
 
+    QList<NmConnection> allowdConnections;
+    for (int i = allowedConnectionsList->count()-1; i >= 0; i--) {
+        QListWidgetItem *item = allowedConnectionsList->item(i);
+        NmConnection con = nmConnectionFromItem(item);
+        allowdConnections.append(con);
+    }
+    settings.setAllowedNmConnections(allowdConnections);
+
     settings.sync();
 }
 
@@ -312,4 +327,14 @@ void SettingsDialog::onChangeDownloadType(int index)
 {
     Settings::DownloadType type = static_cast<Settings::DownloadType>(downloadType->itemData(index).toInt());
     downloadDestination->setEnabled(type == Settings::OVPN);
+}
+
+NmConnection SettingsDialog::nmConnectionFromItem(const QListWidgetItem* item)
+{
+    if (item == nullptr) {
+        qWarning() << "Null item";
+        return NmConnection();
+    }
+    auto data = item->data(Qt::UserRole);
+    return qvariant_cast<NmConnection>(data);
 }
