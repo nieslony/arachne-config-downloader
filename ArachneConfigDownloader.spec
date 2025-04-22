@@ -1,10 +1,10 @@
 %global debug_package %{nil}
 
-%define qt_version 6
-%define kf_version 6
+%define qt_version 5
+%define kf_version 5
 
 Name:       ArachneConfigDownloader
-Version:    1.5.1
+Version:    1.5.2
 Release:    1
 License:    GPL-3.0-or-later
 Summary:    Arachne Config Downloader
@@ -15,7 +15,7 @@ BuildRequires:  qt%{qt_version}-linguist
 BuildRequires:  make
 Recommends:     gnome-shell-extension-appindicator
 
-BuildRequires:  qt%{qt_version}-qtbase-devel
+BuildRequires:  qt%{qt_version}-qtbase-devel extra-cmake-modules
 BuildRequires:  kf%{kf_version}-kio-devel kf%{kf_version}-kiconthemes-devel
 BuildRequires:  desktop-file-utils kf%{kf_version}-rpm-macros
 %define icons_dir   %{_datadir}/icons
@@ -30,7 +30,7 @@ as .ovpn file or creates a NetwormManager connection
 %autosetup
 
 %build
-%cmake_kf6
+%cmake_kf%{kf_version}
 %cmake_build
 
 %install
@@ -81,6 +81,9 @@ fi
 %license LICENSE
 
 %changelog
+* Tue Apr 22 2025 Claas Nieslony <github@nieslony.at> 1.5.2-1
+- 
+
 * Tue Apr 22 2025 Claas Nieslony <github@nieslony.at> 1.5.1-1
 - Many fixes (github@nieslony.at)
 - Fix: ArachneConfigDownloaderApplication::isNmConnectionValid
