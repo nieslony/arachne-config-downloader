@@ -39,7 +39,7 @@ as .ovpn file or creates a NetwormManager connection
 mkdir -pv %{buildroot}/%{desktop_dir}
 touch %{buildroot}/%{desktop_dir}/arachne-cdl.desktop
 desktop-file-edit --set-name=arachne-cdl \
-    --set-generic-name="Arachjne Config Downloader" \
+    --set-generic-name="Arachne Config Downloader" \
     --set-icon=ovpncdl-green \
     --set-key=Type --set-value=Application \
     --set-key=Exec --set-value=arachne-cdl \

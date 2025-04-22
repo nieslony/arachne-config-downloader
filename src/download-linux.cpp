@@ -141,7 +141,8 @@ void ArachneConfigDownloaderApplication::onDownloadJobResult(KJob* job)
 void addKeyValue(QDBusArgument &arg, const QString &key, const QVariant &value)
 {
     arg.beginStructure();
-    arg << key << QDBusVariant(value);
+    qInfo() << key << value.toString();
+    arg << key << value.toString();
     arg.endStructure();
 }
 
@@ -234,7 +235,7 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
         {QString::fromUtf8("type"), QString::fromUtf8("vpn")},
         {QString::fromUtf8("autoconnect"), false},
         {QString::fromUtf8("permissions"), QVariant(QList<QString>{
-            QString::fromUtf8("us<er:") + QString(QString::fromUtf8(getlogin()))
+            QString::fromUtf8("user:") + QString(QString::fromUtf8(getlogin()))
          })
         }
     };
@@ -247,8 +248,8 @@ void ArachneConfigDownloaderApplication::buildDBusArgument(
     data.insert(QString::fromUtf8("cert"), certFileName);
     data.insert(QString::fromUtf8("key"), keyFileName);
     for (const QString &key : dataObj.keys()) {
-        QString value = dataObj.value(key).toString();
-        qDebug().noquote().nospace() << "Data setting " << key << "=" << value;
+        QString value = dataObj.value(key).toVariant().toString();
+        qInfo().noquote().nospace() << "Data setting " << key << "=" << value << " " << dataObj.value(key);
         data.insert(key, value);
     }
     c.insert(QString::fromUtf8("vpn"), QMap<QString,QVariant>{
@@ -287,7 +288,7 @@ void ArachneConfigDownloaderApplication::updateNetworkManagerConnection(
         const QString &conUuid,
         const QByteArray&json)
 {
-    qDebug() << "Adding connection";
+    qInfo() << "Adding connection";
     QDBusArgument arg;
     try {
         buildDBusArgument(arg, json, conUuid);
@@ -333,7 +334,7 @@ void ArachneConfigDownloaderApplication::addNetworkManagerConnection(const QByte
 {
     Settings &settings = Settings::getInstance();
 
-    qDebug() << "Adding connection";
+    qInfo() << "Adding connection";
     QDBusArgument arg;
     try {
         buildDBusArgument(arg, json);

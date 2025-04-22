@@ -45,7 +45,7 @@ private:
     friend QDebug& operator<<(QDebug& os, const NmConnection& dt);
 };
 
-Q_DECLARE_METATYPE(NmConnection);
+Q_DECLARE_METATYPE(NmConnection)
 
 extern QDebug& operator<<(QDebug& os, const NmConnection& dt);
 

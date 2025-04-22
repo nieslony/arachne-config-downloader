@@ -28,12 +28,16 @@ QListWidgetItem *NmConnection::toListWidgetItem() const
     QListWidgetItem *item;
     if (_type == TypeWired)
         item = new QListWidgetItem(
+#if QT_VERSION >= 0x060000
             QIcon::fromTheme(QIcon::ThemeIcon::NetworkWired),
+#endif
             _name
             );
     else if (_type == TypeWireless)
         item = new QListWidgetItem(
+#if QT_VERSION >= 0x060000
             QIcon::fromTheme(QIcon::ThemeIcon::NetworkWireless),
+#endif
             _name
             );
     else

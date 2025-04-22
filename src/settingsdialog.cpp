@@ -26,7 +26,7 @@ SettingsDialog::SettingsDialog()
     loadSettings();
 
     connect(autoDownload, &QCheckBox::toggled, this, &SettingsDialog::onToggleAutoDownload);
-    connect(downloadType, &QComboBox::currentIndexChanged, this, &SettingsDialog::onChangeDownloadType);
+    //connect(downloadType, &QComboBox::currentIndexChanged, this, &SettingsDialog::onChangeDownloadType);
     connect(this, &QDialog::accepted, this, &SettingsDialog::saveSettings);    
 }
 

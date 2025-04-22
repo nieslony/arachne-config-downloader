@@ -4,6 +4,8 @@
 #include <QDir>
 #include <QTimeZone>
 
+Q_DECLARE_METATYPE(QList<QString>)
+
 const QString Settings::SN_ADMIN_SERVER_URL(QString::fromUtf8("adminServerurl"));
 const QString Settings::SN_IGNORE_SSL_ERRORS(QString::fromUtf8("ignoreSslErrors"));
 const QString Settings::SN_AUTO_DOWNLOAD(QString::fromUtf8("autoDownload"));
@@ -157,7 +159,7 @@ void Settings::setAllowedNmConnections(const QList<NmConnection>& cons)
     QList<QString> conUuids;
     for (auto &c: cons)
         conUuids.append(c.uuid());
-    settings.setValue(SN_ALLOW_DOWNLOAD_NM_CONS, conUuids);
+    //settings.setValue(SN_ALLOW_DOWNLOAD_NM_CONS, conUuids);
 }
 
 bool Settings::allowDownloadFromVpn() const

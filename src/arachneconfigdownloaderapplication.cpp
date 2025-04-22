@@ -21,6 +21,7 @@ ArachneConfigDownloaderApplication::ArachneConfigDownloaderApplication(int& argc
     setOrganizationName(QString::fromUtf8("Claas Nieslony"));
     setOrganizationDomain(QString::fromUtf8("nieslony.at"));
     setApplicationName(QString::fromUtf8("Arachne Config Downloader"));
+    setDesktopFileName(QString::fromUtf8("arachne-cdl.desktop"));
 
     Settings &settings = Settings::getInstance();
 

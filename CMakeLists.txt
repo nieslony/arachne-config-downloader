@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 project(ArachneConfigDownloader VERSION 1.0.0 LANGUAGES CXX)
 
-set(QT_MIN_VERSION "6.5.0")
-set(KF_MIN_VERSION "6.0.0")
-
 find_package(ECM ${KF_MIN_VERSION} REQUIRED CONFIG)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${ECM_MODULE_PATH})
 
@@ -13,7 +10,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(FeatureSummary)
 
-find_package(Qt6 REQUIRED COMPONENTS
+find_package(Qt5 REQUIRED COMPONENTS
     Core
     Gui
     DBus
@@ -21,11 +18,11 @@ find_package(Qt6 REQUIRED COMPONENTS
     Widgets
 )
 
-find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
+find_package(KF5 REQUIRED COMPONENTS
     KIO
 )
 
-add_executable(arachne-cdl
+set(SOURCES
     src/arachneconfigdownloaderapplication.cpp
     src/main.cpp
     src/settings.cpp
@@ -40,15 +37,13 @@ add_executable(arachne-cdl
     src/nmconnection.h
 )
 
-qt_add_resources(arachne-cdl icons
-    PREFIX "/"
-    FILES
-        resources/images/ovpncdl-green.svg
-        resources/images/ovpncdl-red.svg
-        resources/images/ovpncdl-yellow.svg
-        resources/images/ovpncdl-blue.svg
+qt_add_resources(
+    SOURCES arachne.qrc
 )
 
+add_executable(arachne-cdl
+    ${SOURCES}
+)
 
 kde_enable_exceptions()
 
@@ -58,7 +53,7 @@ target_link_libraries(arachne-cdl
     Qt::DBus
     Qt::Network
     Qt::Widgets
-    KF6::KIOCore
+    KF5::KIOCore
 )
 
 install(TARGETS arachne-cdl ${KDE_INSTALL_TARGET_ARGS})
