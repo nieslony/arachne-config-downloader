@@ -4,7 +4,7 @@
 %define kf_version 5
 
 Name:       ArachneConfigDownloader
-Version:    1.5.2
+Version:    1.5.3
 Release:    1
 License:    GPL-3.0-or-later
 Summary:    Arachne Config Downloader
@@ -30,7 +30,7 @@ as .ovpn file or creates a NetwormManager connection
 %autosetup
 
 %build
-%cmake_kf%{kf_version}
+%cmake
 %cmake_build
 
 %install
@@ -81,6 +81,9 @@ fi
 %license LICENSE
 
 %changelog
+* Tue Apr 22 2025 Claas Nieslony <github@nieslony.at> 1.5.3-1
+- 
+
 * Tue Apr 22 2025 Claas Nieslony <github@nieslony.at> 1.5.2-1
 - 
 
