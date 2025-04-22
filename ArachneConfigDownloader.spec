@@ -4,7 +4,7 @@
 %define kf_version 6
 
 Name:       ArachneConfigDownloader
-Version:    1.5
+Version:    1.5.1
 Release:    1
 License:    GPL-3.0-or-later
 Summary:    Arachne Config Downloader
@@ -81,6 +81,29 @@ fi
 %license LICENSE
 
 %changelog
+* Tue Apr 22 2025 Claas Nieslony <github@nieslony.at> 1.5.1-1
+- Many fixes (github@nieslony.at)
+- Fix: ArachneConfigDownloaderApplication::isNmConnectionValid
+  (github@nieslony.at)
+- Load/Save allowd connections (github@nieslony.at)
+- Remove debug info (github@nieslony.at)
+- Edit allowed connections (github@nieslony.at)
+- Ignore build folder (github@nieslony.at)
+- Check NM connection name (github@nieslony.at)
+- Add function dbus_property (github@nieslony.at)
+- Uncomment signal (github@nieslony.at)
+- Strip binary (github@nieslony.at)
+- Enable exceptions with function (github@nieslony.at)
+- Fix: license (github@nieslony.at)
+- Fix: qt version and kf version (github@nieslony.at)
+- Add install target (github@nieslony.at)
+- Fix: remove dependency (github@nieslony.at)
+- Add header files (github@nieslony.at)
+- Migrate to cmake and KF6 (github@nieslony.at)
+- - change slots -> Q_SLOTS - change QString(const char*) -> QString::fromUtf8
+  (github@nieslony.at)
+- Switch from qmake to cmake (github@nieslony.at)
+
 * Thu Mar 21 2024 Claas Nieslony <github@nieslony.at> 1.5-1
 - Show last successful download (github@nieslony.at)
 
