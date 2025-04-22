@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.30)
+dcmake_minimum_required(VERSION 3.30)
 project(ArachneConfigDownloader VERSION 1.0.0 LANGUAGES CXX)
+
+set(QT_MIN_VERSION "6.5.0")
+set(KF_MIN_VERSION "6.0.0")
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED CONFIG)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${ECM_MODULE_PATH})
@@ -10,7 +13,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(FeatureSummary)
 
-find_package(Qt5 REQUIRED COMPONENTS
+find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
     DBus
@@ -18,7 +21,7 @@ find_package(Qt5 REQUIRED COMPONENTS
     Widgets
 )
 
-find_package(KF5 REQUIRED COMPONENTS
+find_package(KF6 REQUIRED COMPONENTS
     KIO
 )
 
@@ -53,7 +56,7 @@ target_link_libraries(arachne-cdl
     Qt::DBus
     Qt::Network
     Qt::Widgets
-    KF5::KIOCore
+    KF6::KIOCore
 )
 
 install(TARGETS arachne-cdl ${KDE_INSTALL_TARGET_ARGS})
